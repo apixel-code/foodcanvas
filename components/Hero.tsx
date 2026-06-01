@@ -2,156 +2,205 @@
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
-// ✅ তোমার ছবিগুলো public/images/ ফোল্ডারে রাখো এই নামে:
-// hero-1.jpg, hero-2.jpg, hero-3.jpg, hero-4.jpg, hero-5.jpg ...
-const heroImages = [
-  { src: '/images/hero-1.jpg', alt: 'Food Canvas — তাজা হিমসাগর আম' },
-  { src: '/images/hero-2.jpg', alt: 'Food Canvas — রাজশাহীর সেরা আম' },
-  { src: '/images/hero-3.jpg', alt: 'Food Canvas — কেমিক্যাল মুক্ত আম' },
-  { src: '/images/hero-4.jpg', alt: 'Food Canvas — প্রিমিয়াম প্যাকেজিং' },
-  { src: '/images/hero-5.jpg', alt: 'Food Canvas — সরাসরি বাগান থেকে' },
+const bgImages = [
+  { src: 'https://images.unsplash.com/photo-1501746877-14782df58970?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'তাজা হিমসাগর আম — স্তূপ' },
+  { src: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'রাজশাহীর পাকা হিমসাগর আম' },
+  { src: 'https://images.unsplash.com/photo-1519096845289-95806ee03a1a?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'বাজারের সেরা পাকা আম' },
+  { src: 'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'তাজা পাকা আম কাছ থেকে' },
+  { src: 'https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'হাতে তোলা তাজা আম' },
+  { src: 'https://images.unsplash.com/photo-1622955658214-d05c1c6fcf84?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'গাছে পাকা হিমসাগর আম' },
+]
+
+const stats = [
+  { num: '৫০০+', label: 'সন্তুষ্ট গ্রাহক' },
+  { num: '১০০%', label: 'কেমিক্যাল মুক্ত' },
+  { num: '৬৪ জেলা', label: 'ডেলিভারি' },
+  { num: '৪.৯★', label: 'গড় রেটিং' },
 ]
 
 export default function Hero() {
   const [current, setCurrent] = useState(0)
-  const [fade, setFade] = useState(true)
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setFade(false)
-      setTimeout(() => {
-        setCurrent((prev) => (prev + 1) % heroImages.length)
-        setFade(true)
-      }, 300)
-    }, 3500)
+      setCurrent((prev) => (prev + 1) % bgImages.length)
+    }, 5000)
     return () => clearInterval(timer)
   }, [])
 
-  const goTo = (i: number) => {
-    setFade(false)
-    setTimeout(() => { setCurrent(i); setFade(true) }, 200)
-  }
-
   return (
-    <section
-      className="min-h-screen flex items-center pt-20 pb-12 px-4"
-      style={{ background: 'linear-gradient(135deg, var(--color-cream) 0%, var(--color-mint) 100%)' }}
-    >
-      <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
 
-        {/* Left — Content */}
-        <div className="space-y-6">
+      {/* ── Background Slideshow ── */}
+      {bgImages.map((img, i) => (
+        <div
+          key={img.src}
+          className="hero-bg-slide absolute inset-0"
+          style={{ opacity: i === current ? 1 : 0 }}
+        >
+          <Image
+            src={img.src}
+            alt={img.alt}
+            fill
+            className="object-cover"
+            priority={i === 0}
+            sizes="100vw"
+          />
+        </div>
+      ))}
+
+      {/* ── Overlay layers ── */}
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.35) 50%, rgba(0,0,0,0.72) 100%)' }} />
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.15) 0%, transparent 50%, rgba(0,0,0,0.15) 100%)' }} />
+
+      {/* ── Main Content (Centered) ── */}
+      <div
+        className="relative z-10 text-center px-4 w-full max-w-4xl mx-auto flex flex-col items-center"
+        style={{ paddingTop: '88px', paddingBottom: '120px' }}
+      >
+
+        {/* Premium badge */}
+        <div
+          className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full mb-8 text-sm font-semibold"
+          style={{
+            background: 'rgba(0,0,0,0.35)',
+            border: '1px solid rgba(201,162,39,0.45)',
+            color: '#fcd34d',
+            backdropFilter: 'blur(12px)',
+          }}
+        >
           <span
-            className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-1.5 rounded-full"
-            style={{ background: 'var(--color-primary-pale)', color: 'var(--color-primary)' }}
-          >
-            🌿 ১০০% কেমিক্যাল মুক্ত
+            className="w-2 h-2 rounded-full flex-shrink-0"
+            style={{ background: '#4ade80', boxShadow: '0 0 8px #4ade80', animation: 'pulse 2s infinite' }}
+          />
+          ১০০% কেমিক্যাল মুক্ত &nbsp;·&nbsp; সরাসরি রাজশাহীর বাগান থেকে
+        </div>
+
+        {/* Main headline */}
+        <h1
+          className="font-bold text-white leading-tight mb-5"
+          style={{ fontSize: 'clamp(2.4rem, 7vw, 5.25rem)', textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
+        >
+          রাজশাহীর সেরা
+          <br />
+          <span style={{ color: '#fbbf24' }}>হিমসাগর আম</span>
+        </h1>
+
+        {/* Tagline */}
+        <p
+          className="text-white/70 mb-10"
+          style={{ fontSize: 'clamp(1.05rem, 2.5vw, 1.4rem)', fontWeight: 300, letterSpacing: '0.03em' }}
+        >
+          Food Canvas — তাজা, মিষ্টি, বিশ্বস্ত · আপনার দরজায় পৌঁছে দেই
+        </p>
+
+        {/* Price badge */}
+        <div
+          className="inline-flex flex-col items-center rounded-2xl px-10 py-5 mb-10"
+          style={{
+            background: 'rgba(0,0,0,0.45)',
+            border: '1px solid rgba(220,38,38,0.4)',
+            backdropFilter: 'blur(16px)',
+          }}
+        >
+          <span className="text-white/55 text-sm mb-1">এই মৌসুমে বিশেষ মূল্য</span>
+          <span className="text-white font-bold" style={{ fontSize: 'clamp(2rem, 5vw, 2.75rem)', lineHeight: 1.1 }}>
+            মাত্র <span style={{ color: '#f87171' }}>১৪০ টাকা</span>/কেজি
           </span>
-
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight" style={{ color: 'var(--color-primary)' }}>
-            রাজশাহীর সেরা
-            <br />
-            <span className="text-5xl md:text-6xl">Food Canvas</span>
-          </h1>
-
-          <p className="text-lg text-stone-600">
-            সরাসরি বাগান থেকে আপনার দরজায় — তাজা, মিষ্টি, বিশ্বস্ত
-          </p>
-
-          <div
-            className="inline-block rounded-2xl px-6 py-4"
-            style={{ background: 'var(--color-alert-light)', border: '2px solid #fca5a5' }}
+          <span
+            className="text-xs font-bold uppercase tracking-widest mt-2 px-3 py-1 rounded-full"
+            style={{ color: '#fbbf24', background: 'rgba(251,191,36,0.12)', border: '1px solid rgba(251,191,36,0.25)' }}
           >
-            <p className="text-sm text-stone-600 mb-1">বিশেষ অফার মূল্য</p>
-            <p className="text-3xl font-bold" style={{ color: 'var(--color-alert)' }}>
-              মাত্র ১৪০ টাকা/কেজি
-            </p>
-          </div>
-
-          <ul className="grid grid-cols-2 gap-3">
-            {['কেমিক্যাল মুক্ত', 'প্রিমিয়াম প্যাকেজিং', 'হোম ডেলিভারি সারাদেশ', 'সীমিত স্টক'].map((item) => (
-              <li key={item} className="flex items-center gap-2 text-stone-700 font-medium">
-                <span className="text-green-600 font-bold">✓</span> {item}
-              </li>
-            ))}
-          </ul>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a
-              href="#order"
-              className="btn-accent flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-full text-lg"
-              style={{ boxShadow: '0 6px 24px rgba(249,115,22,0.35)' }}
-            >
-              🛒 এখনই অর্ডার করুন
-            </a>
-            <a href="#products" className="btn-outline-primary flex items-center justify-center gap-2 font-bold px-8 py-4 rounded-full text-lg">
-              🥭 পণ্য দেখুন
-            </a>
-          </div>
+            ⚡ সীমিত স্টক — এখনই সুযোগ নিন
+          </span>
         </div>
 
-        {/* Right — Slideshow */}
-        <div className="relative flex flex-col items-center gap-4">
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <a
+            href="#order"
+            className="inline-flex items-center justify-center gap-2.5 px-10 py-4 rounded-full font-bold text-white text-lg transition-all hover:-translate-y-1"
+            style={{
+              background: 'linear-gradient(135deg, #e8721e, #c9570e)',
+              boxShadow: '0 8px 32px rgba(232,114,30,0.5)',
+            }}
+          >
+            🛒 এখনই অর্ডার করুন
+          </a>
+          <a
+            href="#products"
+            className="inline-flex items-center justify-center gap-2.5 px-10 py-4 rounded-full font-bold text-lg text-white transition-all hover:-translate-y-1 hover:bg-white/10"
+            style={{
+              border: '2px solid rgba(255,255,255,0.38)',
+              backdropFilter: 'blur(8px)',
+            }}
+          >
+            🥭 প্যাকেজ দেখুন
+          </a>
+        </div>
 
-          {/* Image container */}
-          <div className="relative w-full max-w-md aspect-square rounded-3xl overflow-hidden shadow-2xl">
-            <Image
-              key={current}
-              src={heroImages[current].src}
-              alt={heroImages[current].alt}
-              fill
-              className="object-cover"
-              style={{
-                opacity: fade ? 1 : 0,
-                transition: 'opacity 0.3s ease-in-out',
-              }}
-              priority={current === 0}
-            />
-
-            {/* Floating badge */}
-            <div
-              className="absolute bottom-4 left-4 rounded-2xl px-4 py-3 shadow-lg"
-              style={{ background: 'var(--color-primary)', color: 'white' }}
-            >
-              <p className="text-xs font-medium opacity-80">এই মৌসুমে</p>
-              <p className="text-lg font-bold">সীমিত স্টক 🔥</p>
+        {/* Stats row */}
+        <div className="flex flex-wrap justify-center gap-x-10 gap-y-5">
+          {stats.map((s) => (
+            <div key={s.label} className="text-center">
+              <p className="font-bold" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.75rem)', color: '#fbbf24' }}>
+                {s.num}
+              </p>
+              <p className="text-xs uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                {s.label}
+              </p>
             </div>
-
-            {/* Prev/Next arrows */}
-            <button
-              onClick={() => goTo((current - 1 + heroImages.length) % heroImages.length)}
-              className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow text-stone-700 font-bold text-lg transition-all"
-              aria-label="আগের ছবি"
-            >
-              ‹
-            </button>
-            <button
-              onClick={() => goTo((current + 1) % heroImages.length)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/80 hover:bg-white flex items-center justify-center shadow text-stone-700 font-bold text-lg transition-all"
-              aria-label="পরের ছবি"
-            >
-              ›
-            </button>
-          </div>
-
-          {/* Dot indicators */}
-          <div className="flex items-center gap-2">
-            {heroImages.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => goTo(i)}
-                className="rounded-full transition-all duration-300"
-                style={{
-                  width: i === current ? '24px' : '8px',
-                  height: '8px',
-                  background: i === current ? 'var(--color-primary)' : '#d1d5db',
-                }}
-                aria-label={`ছবি ${i + 1}`}
-              />
-            ))}
-          </div>
-
+          ))}
         </div>
+      </div>
+
+      {/* ── Dot indicators (right side) ── */}
+      <div className="absolute right-5 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-2.5">
+        {bgImages.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className="rounded-full transition-all duration-500 block"
+            style={{
+              width: 5,
+              height: i === current ? 28 : 5,
+              background: i === current ? '#fbbf24' : 'rgba(255,255,255,0.28)',
+            }}
+            aria-label={`ছবি ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* ── Scroll indicator ── */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 select-none">
+        <span className="text-white/35 uppercase tracking-widest" style={{ fontSize: '0.6rem' }}>
+          স্ক্রোল করুন
+        </span>
+        <div className="relative w-px h-10 overflow-hidden" style={{ background: 'rgba(255,255,255,0.1)' }}>
+          <div className="absolute inset-x-0 top-0 h-full scroll-line" style={{ background: 'rgba(255,255,255,0.5)' }} />
+        </div>
+      </div>
+
+      {/* ── Bottom stats bar overlay ── */}
+      <div
+        className="absolute bottom-0 left-0 right-0 z-10 hidden lg:flex items-center justify-center gap-10 py-4 px-6"
+        style={{
+          background: 'rgba(10,31,14,0.75)',
+          backdropFilter: 'blur(12px)',
+          borderTop: '1px solid rgba(201,162,39,0.18)',
+        }}
+      >
+        {[
+          { icon: '🌿', text: '১০০% কেমিক্যাল মুক্ত' },
+          { icon: '🚚', text: 'সারাদেশে ডেলিভারি' },
+          { icon: '📦', text: 'প্রিমিয়াম প্যাকেজিং' },
+          { icon: '✅', text: 'মানের নিশ্চয়তা' },
+        ].map((item) => (
+          <div key={item.text} className="flex items-center gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.65)' }}>
+            <span>{item.icon}</span>
+            <span>{item.text}</span>
+          </div>
+        ))}
       </div>
     </section>
   )

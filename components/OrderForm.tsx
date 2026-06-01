@@ -13,16 +13,16 @@ const districts = [
   'নীলফামারী','লালমনিরহাট','কুড়িগ্রাম','গাইবান্ধা','জামালপুর','শেরপুর','নেত্রকোনা',
 ]
 
-const PRICE_PER_KG    = 140  // পণ্যমূল্য প্রতি কেজি
-const DELIVERY_DHAKA  = 120  // ঢাকায় ডেলিভারি প্রতি কেজি
-const DELIVERY_OUTSIDE = 140 // ঢাকার বাইরে ডেলিভারি প্রতি কেজি
+const PRICE_PER_KG     = 140
+const DELIVERY_DHAKA   = 120
+const DELIVERY_OUTSIDE = 140
 
 interface FormData {
   name: string
   phone: string
   address: string
   district: string
-  quantity: string   // কেজি — কাস্টমার নিজে লিখবে
+  quantity: string
   payment: string
   transactionId: string
   note: string
@@ -33,13 +33,16 @@ const initialState: FormData = {
   quantity: '', payment: 'cod', transactionId: '', note: '',
 }
 
+const inp = 'w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:border-transparent bg-white text-stone-800 text-sm transition-all'
+const inpFocus = 'focus:ring-green-400'
+const lbl = 'block text-xs font-bold text-stone-400 mb-1.5 uppercase tracking-wider'
+
 export default function OrderForm() {
   const [form, setForm] = useState<FormData>(initialState)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
-  // Live calculation
   const kg = parseFloat(form.quantity) || 0
   const product  = kg * PRICE_PER_KG
   const delivery = form.district
@@ -70,57 +73,74 @@ export default function OrderForm() {
     } finally { setLoading(false) }
   }
 
-  const inp = 'w-full px-3 py-2.5 rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-green-400 bg-white text-stone-800 text-sm'
-  const lbl = 'block text-xs font-semibold text-stone-500 mb-1 uppercase tracking-wide'
-
   return (
-    <section id="order" className="py-14 px-4" style={{ background: 'var(--color-primary)' }}>
+    <section id="order" className="py-24 px-4" style={{ background: '#0a1f0e' }}>
       <div className="max-w-xl mx-auto">
 
         {/* Header */}
-        <div className="text-center text-white mb-6">
-          <h2 className="text-2xl md:text-3xl font-bold mb-1">এখনই অর্ডার করুন 🥭</h2>
-          <p className="text-sm opacity-75">ফর্ম পূরণ করুন — ২৪ ঘণ্টার মধ্যে কল করব</p>
+        <div className="text-center mb-10">
+          <span className="badge-gold mb-5">অর্ডার করুন</span>
+          <h2
+            className="font-bold text-white mb-2"
+            style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)' }}
+          >
+            এখনই অর্ডার দিন 🥭
+          </h2>
+          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.9rem' }}>
+            ফর্ম পূরণ করুন — ২৪ ঘণ্টার মধ্যে কল করব
+          </p>
         </div>
 
-        {/* Success */}
+        {/* Success state */}
         {success && (
-          <div className="rounded-2xl p-5 text-center" style={{ background: '#d1fae5', border: '2px solid #6ee7b7' }}>
-            <p className="text-2xl mb-1">✅</p>
-            <p className="font-bold text-green-800">অর্ডার সফলভাবে জমা হয়েছে!</p>
-            <p className="text-sm text-green-700 mt-1">শীঘ্রই আপনাকে কল করা হবে।</p>
-            <button onClick={() => setSuccess(false)} className="mt-3 text-xs underline text-green-700">
+          <div
+            className="rounded-2xl p-8 text-center"
+            style={{ background: '#d1fae5', border: '2px solid #6ee7b7' }}
+          >
+            <p className="text-4xl mb-3">✅</p>
+            <p className="font-bold text-green-800 text-xl mb-1">অর্ডার সফলভাবে জমা হয়েছে!</p>
+            <p className="text-sm text-green-700">শীঘ্রই আপনাকে কল করা হবে।</p>
+            <button
+              onClick={() => setSuccess(false)}
+              className="mt-4 text-xs underline text-green-700"
+            >
               আরেকটি অর্ডার করুন
             </button>
           </div>
         )}
 
         {!success && (
-          <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-5 space-y-4" style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}>
-
+          <form
+            onSubmit={handleSubmit}
+            className="rounded-3xl p-7 space-y-5"
+            style={{
+              background: 'white',
+              boxShadow: '0 24px 64px rgba(0,0,0,0.25)',
+            }}
+          >
             {/* নাম + মোবাইল */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={lbl}>নাম *</label>
-                <input type="text" className={inp} placeholder="আপনার নাম" value={form.name} onChange={set('name')} required />
+                <input type="text" className={`${inp} ${inpFocus}`} placeholder="আপনার নাম" value={form.name} onChange={set('name')} required />
               </div>
               <div>
                 <label className={lbl}>মোবাইল *</label>
-                <input type="tel" className={inp} placeholder="01XXXXXXXXX" value={form.phone} onChange={set('phone')} required />
+                <input type="tel" className={`${inp} ${inpFocus}`} placeholder="01XXXXXXXXX" value={form.phone} onChange={set('phone')} required />
               </div>
             </div>
 
             {/* ঠিকানা */}
             <div>
               <label className={lbl}>সম্পূর্ণ ঠিকানা *</label>
-              <textarea className={inp} rows={2} placeholder="বাসা/রাস্তা/এলাকা" value={form.address} onChange={set('address')} required />
+              <textarea className={`${inp} ${inpFocus}`} rows={2} placeholder="বাসা/রাস্তা/এলাকা" value={form.address} onChange={set('address')} required />
             </div>
 
             {/* জেলা + পরিমাণ */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className={lbl}>জেলা *</label>
-                <select className={inp} value={form.district} onChange={set('district')} required>
+                <select className={`${inp} ${inpFocus}`} value={form.district} onChange={set('district')} required>
                   <option value="">জেলা বেছে নিন</option>
                   {districts.map((d) => <option key={d} value={d}>{d}</option>)}
                 </select>
@@ -129,7 +149,7 @@ export default function OrderForm() {
                 <label className={lbl}>পরিমাণ (কেজি) *</label>
                 <input
                   type="number"
-                  className={inp}
+                  className={`${inp} ${inpFocus}`}
                   placeholder="যেমন: ৫"
                   min="1"
                   step="1"
@@ -144,7 +164,7 @@ export default function OrderForm() {
             {/* পেমেন্ট */}
             <div>
               <label className={lbl}>পেমেন্ট পদ্ধতি *</label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-3 gap-2.5">
                 {[
                   { id: 'cod',   label: '💵 ক্যাশ অন ডেলিভারি' },
                   { id: 'bkash', label: '💜 বিকাশ' },
@@ -154,11 +174,11 @@ export default function OrderForm() {
                   return (
                     <label
                       key={pm.id}
-                      className="flex items-center justify-center p-2.5 rounded-xl cursor-pointer border-2 text-xs font-semibold text-center transition-all"
+                      className="flex items-center justify-center p-3 rounded-xl cursor-pointer border-2 text-xs font-semibold text-center transition-all"
                       style={{
                         borderColor: active ? 'var(--color-primary)' : '#e5e7eb',
                         background: active ? 'var(--color-primary-pale)' : 'white',
-                        color: active ? 'var(--color-primary)' : '#374151',
+                        color: active ? 'var(--color-primary)' : '#6b7280',
                       }}
                     >
                       <input type="radio" name="payment" value={pm.id} checked={active} onChange={set('payment')} className="hidden" />
@@ -173,22 +193,28 @@ export default function OrderForm() {
             {(form.payment === 'bkash' || form.payment === 'nagad') && (
               <div>
                 <label className={lbl}>ট্রানজেকশন ID *</label>
-                <input type="text" className={inp} placeholder="পেমেন্টের পর ID দিন" value={form.transactionId} onChange={set('transactionId')} required />
+                <input type="text" className={`${inp} ${inpFocus}`} placeholder="পেমেন্টের পর ID দিন" value={form.transactionId} onChange={set('transactionId')} required />
               </div>
             )}
 
             {/* নোট */}
             <div>
               <label className={lbl}>বিশেষ নির্দেশনা (ঐচ্ছিক)</label>
-              <textarea className={inp} rows={2} placeholder="কোনো নির্দেশনা থাকলে লিখুন..." value={form.note} onChange={set('note')} />
+              <textarea className={`${inp} ${inpFocus}`} rows={2} placeholder="কোনো নির্দেশনা থাকলে লিখুন..." value={form.note} onChange={set('note')} />
             </div>
 
-            {/* অর্ডার সারসংক্ষেপ */}
-            <div className="rounded-xl p-4 space-y-2 text-sm" style={{ background: 'var(--color-mint)', border: '1px solid var(--color-mint-dark)' }}>
-              <p className="font-bold text-stone-600 text-xs uppercase tracking-wide mb-2">মূল্য হিসাব</p>
+            {/* মূল্য হিসাব */}
+            <div
+              className="rounded-2xl p-5 space-y-2.5 text-sm"
+              style={{ background: 'var(--color-mint)', border: '1px solid var(--color-mint-dark)' }}
+            >
+              <p className="font-bold text-stone-500 text-xs uppercase tracking-widest mb-3">মূল্য হিসাব</p>
 
               <div className="flex justify-between text-stone-600">
-                <span>পণ্যমূল্য  <span className="text-stone-400">({kg || '?'} কেজি × ৳{PRICE_PER_KG})</span></span>
+                <span>
+                  পণ্যমূল্য
+                  <span className="text-stone-400 text-xs ml-1">({kg || '?'} কেজি × ৳{PRICE_PER_KG})</span>
+                </span>
                 <span className="font-semibold">{kg > 0 ? `৳${product.toLocaleString()}` : '—'}</span>
               </div>
 
@@ -196,7 +222,7 @@ export default function OrderForm() {
                 <span>
                   ডেলিভারি
                   {form.district && kg > 0 && (
-                    <span className="text-stone-400"> ({kg} কেজি × ৳{deliveryRate})</span>
+                    <span className="text-stone-400 text-xs ml-1">({kg} কেজি × ৳{deliveryRate})</span>
                   )}
                 </span>
                 <span className="font-semibold">
@@ -207,12 +233,12 @@ export default function OrderForm() {
               {form.district && (
                 <p className="text-xs text-stone-400">
                   {form.district === 'ঢাকা'
-                    ? '📍 ঢাকা: ডেলিভারি ৳১২০/কেজি'
-                    : '📍 ঢাকার বাইরে: ডেলিভারি ৳১৪০/কেজি'}
+                    ? '📍 ঢাকা: ৳১২০/কেজি ডেলিভারি'
+                    : '📍 ঢাকার বাইরে: ৳১৪০/কেজি ডেলিভারি'}
                 </p>
               )}
 
-              <div className="border-t border-stone-200 pt-2 flex justify-between font-bold text-base">
+              <div className="border-t border-stone-200 pt-3 flex justify-between font-bold text-base">
                 <span style={{ color: 'var(--color-primary)' }}>মোট</span>
                 <span style={{ color: 'var(--color-alert)' }}>
                   {form.district && kg > 0 ? `৳${total.toLocaleString()}` : '—'}
@@ -222,7 +248,10 @@ export default function OrderForm() {
 
             {/* Error */}
             {error && (
-              <div className="rounded-lg px-4 py-3 text-sm font-medium" style={{ background: 'var(--color-alert-light)', color: 'var(--color-alert)' }}>
+              <div
+                className="rounded-xl px-4 py-3 text-sm font-medium"
+                style={{ background: 'var(--color-alert-light)', color: 'var(--color-alert)', border: '1px solid #fca5a5' }}
+              >
                 ⚠️ {error}
               </div>
             )}
@@ -231,10 +260,10 @@ export default function OrderForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full text-white font-bold py-3.5 rounded-xl text-base transition-all disabled:opacity-60"
+              className="w-full font-bold py-4 rounded-2xl text-base text-white transition-all disabled:opacity-60"
               style={{
-                background: loading ? '#9ca3af' : 'var(--color-accent)',
-                boxShadow: loading ? 'none' : '0 4px 16px rgba(249,115,22,0.3)',
+                background: loading ? '#9ca3af' : 'linear-gradient(135deg, #e8721e, #c9570e)',
+                boxShadow: loading ? 'none' : '0 8px 28px rgba(232,114,30,0.4)',
               }}
             >
               {loading ? '⏳ পাঠানো হচ্ছে...' : '✅ অর্ডার নিশ্চিত করুন'}

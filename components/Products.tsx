@@ -2,141 +2,161 @@
 import Image from 'next/image'
 import { useState } from 'react'
 
-// ✅ তোমার ছবিগুলো public/images/ ফোল্ডারে রাখো এই নামে:
-// product-1.jpg → ১ কেজি প্যাকেজ
-// product-2.jpg → ৫ কেজি প্যাকেজ
-// product-3.jpg → ১০ কেজি প্যাকেজ
-// product-detail-1.jpg, product-detail-2.jpg, ... → gallery ছবি
 const products = [
   {
     id: 1,
     name: '১ কেজি প্যাকেজ',
-    images: ['/images/product-1.jpg', '/images/hero-1.jpg', '/images/hero-2.jpg'],
+    images: [
+      'https://images.unsplash.com/photo-1553279768-865429fa0078?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=800&h=600&fit=crop&q=85&auto=format',
+    ],
     badge: 'ট্রায়াল প্যাক',
-    badgeBg: 'var(--color-primary-pale)',
-    badgeColor: 'var(--color-primary)',
+    badgeStyle: { background: 'var(--color-primary-pale)', color: 'var(--color-primary)' },
     weight: '১ কেজি',
     mangoes: '৫–৭টি আম',
     price: '১৪০ টাকা/কেজি',
     delivery: '+ ডেলিভারি চার্জ',
     features: ['তাজা হিমসাগর', 'প্রিমিয়াম প্যাক', 'কেমিক্যাল মুক্ত'],
     popular: false,
+    cta: 'অর্ডার করুন',
   },
   {
     id: 2,
     name: '৫ কেজি প্যাকেজ',
-    images: ['/images/product-2.jpg', '/images/hero-3.jpg', '/images/hero-4.jpg'],
+    images: [
+      'https://images.unsplash.com/photo-1501746877-14782df58970?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1519096845289-95806ee03a1a?w=800&h=600&fit=crop&q=85&auto=format',
+    ],
     badge: '⭐ সবচেয়ে জনপ্রিয়',
-    badgeBg: 'var(--color-accent)',
-    badgeColor: '#fff',
+    badgeStyle: { background: '#e8721e', color: '#fff' },
     weight: '৫ কেজি',
     mangoes: '২৫–৩৫টি আম',
     price: '১৪০ টাকা/কেজি',
     delivery: 'ঢাকায় সাশ্রয়ী ডেলিভারি',
     features: ['সাশ্রয়ী প্যাক', 'পরিবারের জন্য আদর্শ', 'বিশেষ ছাড়'],
     popular: true,
+    cta: '⭐ এখনই অর্ডার করুন',
   },
   {
     id: 3,
     name: '১০ কেজি প্যাকেজ',
-    images: ['/images/product-3.jpg', '/images/hero-5.jpg', '/images/hero-1.jpg'],
+    images: [
+      'https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1622955658214-d05c1c6fcf84?w=800&h=600&fit=crop&q=85&auto=format',
+    ],
     badge: '💎 বেস্ট ভ্যালু',
-    badgeBg: 'var(--color-primary)',
-    badgeColor: '#fff',
+    badgeStyle: { background: 'var(--color-primary)', color: '#fff' },
     weight: '১০ কেজি',
     mangoes: '৫০–৭০টি আম',
     price: '১৪০ টাকা/কেজি',
     delivery: 'সারাদেশে ডেলিভারি',
     features: ['সর্বোচ্চ সাশ্রয়', 'অফিস/গিফট প্যাক', 'বিশেষ ডিসকাউন্ট'],
     popular: false,
+    cta: 'অর্ডার করুন',
   },
 ]
 
-function ProductCard({ p }: { p: typeof products[0] }) {
+function ProductCard({ p }: { p: (typeof products)[0] }) {
   const [imgIdx, setImgIdx] = useState(0)
 
   return (
     <div
-      className="product-card-hover rounded-3xl overflow-hidden bg-white"
+      className="product-card-hover rounded-3xl overflow-hidden bg-white flex flex-col"
       style={{
-        boxShadow: p.popular ? '0 8px 32px rgba(249,115,22,0.2)' : '0 4px 16px rgba(0,0,0,0.08)',
-        border: p.popular ? '2px solid var(--color-accent)' : '1.5px solid var(--color-border)',
+        boxShadow: p.popular
+          ? '0 12px 48px rgba(232,114,30,0.22)'
+          : '0 4px 24px rgba(0,0,0,0.08)',
+        border: p.popular ? '2px solid #e8721e' : '1.5px solid #ede9e4',
       }}
     >
-      {/* Product Image with thumbnail strip */}
-      <div className="relative">
-        <div className="relative h-56 w-full overflow-hidden">
-          <Image
-            src={p.images[imgIdx]}
-            alt={`Food Canvas হিমসাগর আম ${p.name}`}
-            fill
-            className="object-cover transition-all duration-300"
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
-          <span
-            className="absolute top-3 left-3 text-xs font-bold px-3 py-1.5 rounded-full z-10"
-            style={{ background: p.badgeBg, color: p.badgeColor }}
-          >
-            {p.badge}
-          </span>
+      {/* Popular glow strip */}
+      {p.popular && (
+        <div
+          className="text-center py-2 text-xs font-bold uppercase tracking-widest text-white"
+          style={{ background: 'linear-gradient(90deg, #e8721e, #c9570e)' }}
+        >
+          🔥 সর্বোচ্চ চাহিদার প্যাকেজ
         </div>
+      )}
 
+      {/* Image */}
+      <div className="relative h-56 overflow-hidden bg-stone-100">
+        <Image
+          src={p.images[imgIdx]}
+          alt={`Food Canvas হিমসাগর আম ${p.name}`}
+          fill
+          className="object-cover transition-all duration-500"
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+        {/* Badge */}
+        <span
+          className="absolute top-3 left-3 text-xs font-bold px-3 py-1.5 rounded-full z-10 shadow-sm"
+          style={p.badgeStyle}
+        >
+          {p.badge}
+        </span>
         {/* Thumbnail strip */}
         {p.images.length > 1 && (
-          <div className="flex gap-1.5 px-3 py-2 bg-stone-50 border-b border-stone-100">
-            {p.images.map((img, i) => (
+          <div className="absolute bottom-0 left-0 right-0 flex gap-1.5 px-3 py-2" style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.5))' }}>
+            {p.images.map((_, i) => (
               <button
                 key={i}
                 onClick={() => setImgIdx(i)}
-                className="relative rounded-md overflow-hidden transition-all"
+                className="rounded-full transition-all duration-300"
                 style={{
-                  width: 44,
-                  height: 36,
-                  border: i === imgIdx ? '2px solid var(--color-primary)' : '2px solid transparent',
-                  opacity: i === imgIdx ? 1 : 0.6,
+                  width: i === imgIdx ? 20 : 7,
+                  height: 7,
+                  background: i === imgIdx ? '#fbbf24' : 'rgba(255,255,255,0.5)',
                 }}
-              >
-                <Image
-                  src={img}
-                  alt={`ছবি ${i + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="44px"
-                />
-              </button>
+                aria-label={`ছবি ${i + 1}`}
+              />
             ))}
           </div>
         )}
       </div>
 
-      <div className="p-5 space-y-3">
+      {/* Content */}
+      <div className="p-6 flex flex-col flex-1 gap-4">
         <div>
-          <h3 className="text-xl font-bold" style={{ color: 'var(--color-primary)' }}>
+          <h3 className="text-xl font-bold mb-1" style={{ color: 'var(--color-primary)' }}>
             {p.name}
           </h3>
-          <p className="text-stone-500 text-sm mt-0.5">{p.weight} • {p.mangoes}</p>
+          <p className="text-stone-400 text-sm">{p.weight} &nbsp;·&nbsp; {p.mangoes}</p>
         </div>
 
         <div>
-          <span className="text-2xl font-bold" style={{ color: 'var(--color-alert)' }}>
+          <span className="text-2xl font-bold" style={{ color: '#dc2626' }}>
             {p.price}
           </span>
-          <p className="text-xs font-medium text-green-700 mt-0.5">{p.delivery}</p>
+          <p className="text-xs font-semibold mt-1" style={{ color: 'var(--color-primary)' }}>
+            {p.delivery}
+          </p>
         </div>
 
-        <ul className="space-y-1.5">
+        <ul className="space-y-2 flex-1">
           {p.features.map((f) => (
-            <li key={f} className="flex items-center gap-2 text-sm text-stone-700">
-              <span className="text-green-600">✓</span> {f}
+            <li key={f} className="flex items-center gap-2.5 text-sm text-stone-600">
+              <span
+                className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                style={{ background: 'var(--color-primary-pale)', color: 'var(--color-primary)' }}
+              >
+                ✓
+              </span>
+              {f}
             </li>
           ))}
         </ul>
 
         <a
           href="#order"
-          className={`block text-center font-bold py-3 rounded-xl text-white ${p.popular ? 'btn-accent' : 'btn-primary'}`}
+          className={`block text-center font-bold py-3.5 rounded-xl text-white text-sm mt-auto transition-all hover:-translate-y-0.5 ${p.popular ? 'btn-accent' : 'btn-primary'}`}
+          style={{
+            boxShadow: p.popular
+              ? '0 6px 20px rgba(232,114,30,0.35)'
+              : '0 6px 20px rgba(15,61,32,0.25)',
+          }}
         >
-          {p.popular ? '⭐ এখনই অর্ডার করুন' : 'অর্ডার করুন'}
+          {p.cta}
         </a>
       </div>
     </div>
@@ -145,20 +165,36 @@ function ProductCard({ p }: { p: typeof products[0] }) {
 
 export default function Products() {
   return (
-    <section id="products" className="py-16 px-4 bg-white">
+    <section id="products" className="py-24 px-4" style={{ background: 'var(--color-cream)' }}>
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-3" style={{ color: 'var(--color-primary)' }}>
-            আমাদের প্যাকেজ বেছে নিন
+
+        {/* Header */}
+        <div className="text-center mb-14">
+          <span className="badge-green mb-5">আমাদের প্যাকেজ</span>
+          <h2
+            className="font-bold mb-4 leading-tight"
+            style={{ color: 'var(--color-primary)', fontSize: 'clamp(1.8rem, 4vw, 2.75rem)' }}
+          >
+            আপনার পছন্দের প্যাকেজ
+            <br />
+            <span style={{ color: 'var(--color-accent)' }}>বেছে নিন</span>
           </h2>
-          <p className="text-stone-600 text-lg">Food Canvas — সরাসরি রাজশাহীর বাগান থেকে তাজা হিমসাগর আম</p>
+          <p className="text-stone-500 text-lg">
+            সরাসরি রাজশাহীর বাগান থেকে — তাজা হিমসাগর আম
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
           {products.map((p) => (
             <ProductCard key={p.id} p={p} />
           ))}
         </div>
+
+        {/* Note */}
+        <p className="text-center text-stone-400 text-sm mt-8">
+          * সব প্যাকেজেই ১৪০ টাকা/কেজি হারে মূল্য।&nbsp;
+          ডেলিভারি চার্জ জেলাভেদে আলাদা। অর্ডার করার সময় জানানো হবে।
+        </p>
       </div>
     </section>
   )

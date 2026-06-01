@@ -13,8 +13,8 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll)
+    const onScroll = () => setScrolled(window.scrollY > 60)
+    window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
@@ -22,20 +22,24 @@ export default function Navbar() {
     <nav
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
       style={{
-        background: scrolled ? 'rgba(255,255,255,0.97)' : 'transparent',
-        backdropFilter: scrolled ? 'blur(12px)' : 'none',
-        boxShadow: scrolled ? '0 2px 16px rgba(0,0,0,0.08)' : 'none',
+        background: scrolled ? 'rgba(10,31,14,0.96)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(20px)' : 'none',
+        boxShadow: scrolled ? '0 2px 32px rgba(0,0,0,0.3)' : 'none',
+        borderBottom: scrolled ? '1px solid rgba(201,162,39,0.18)' : 'none',
       }}
     >
-      <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2">
-          <span className="text-3xl">🥭</span>
+        <a href="#" className="flex items-center gap-3 group">
+          <span className="text-3xl transition-transform group-hover:scale-110">🥭</span>
           <div>
-            <p className="font-bold text-lg leading-tight" style={{ color: 'var(--color-primary)' }}>
+            <p className="font-bold text-lg leading-tight text-white tracking-tight">
               Food Canvas
             </p>
-            <p className="text-xs leading-tight text-stone-500">রাজশাহী থেকে সরাসরি</p>
+            <p className="text-xs leading-tight font-medium" style={{ color: '#c9a227' }}>
+              রাজশাহী থেকে সরাসরি
+            </p>
           </div>
         </a>
 
@@ -45,7 +49,10 @@ export default function Navbar() {
             <li key={link.label}>
               <a
                 href={link.href}
-                className="text-stone-700 font-medium transition-colors hover:text-green-700"
+                className="text-sm font-medium transition-all"
+                style={{ color: 'rgba(255,255,255,0.75)', letterSpacing: '0.02em' }}
+                onMouseEnter={(e) => { (e.target as HTMLElement).style.color = '#fbbf24' }}
+                onMouseLeave={(e) => { (e.target as HTMLElement).style.color = 'rgba(255,255,255,0.75)' }}
               >
                 {link.label}
               </a>
@@ -56,15 +63,15 @@ export default function Navbar() {
         {/* CTA Button */}
         <a
           href="#order"
-          className="btn-accent hidden md:inline-flex items-center gap-2 font-bold px-5 py-2.5 rounded-full"
-          style={{ boxShadow: '0 4px 16px rgba(249,115,22,0.3)' }}
+          className="btn-accent hidden md:inline-flex items-center gap-2 font-bold px-6 py-2.5 rounded-full text-sm"
+          style={{ boxShadow: '0 4px 20px rgba(232,114,30,0.4)' }}
         >
           🛒 অর্ডার করুন
         </a>
 
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden p-2 text-stone-700 text-2xl"
+          className="md:hidden p-2 text-white text-2xl"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="মেনু"
         >
@@ -74,13 +81,20 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-stone-100 px-4 py-4 space-y-3">
+        <div
+          className="md:hidden px-5 py-4 space-y-1"
+          style={{
+            background: 'rgba(10,31,14,0.98)',
+            borderTop: '1px solid rgba(255,255,255,0.08)',
+          }}
+        >
           {links.map((link) => (
             <a
               key={link.label}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="block text-stone-700 font-medium py-2 hover:text-green-700"
+              className="block py-3 font-medium text-sm border-b transition-colors"
+              style={{ color: 'rgba(255,255,255,0.75)', borderColor: 'rgba(255,255,255,0.07)' }}
             >
               {link.label}
             </a>
@@ -88,8 +102,7 @@ export default function Navbar() {
           <a
             href="#order"
             onClick={() => setMenuOpen(false)}
-            className="block text-center text-white font-bold py-3 rounded-xl"
-            style={{ background: 'var(--color-accent)' }}
+            className="btn-accent block text-center text-white font-bold py-3.5 rounded-xl mt-4 text-sm"
           >
             🛒 এখনই অর্ডার করুন
           </a>
