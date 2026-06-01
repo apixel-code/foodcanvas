@@ -182,7 +182,11 @@ body {
 /* ─── FAQ accordion ─── */
 .faq-answer {
   overflow: hidden;
-  transition: max-height 0.35s ease, padding 0.35s ease;
+  max-height: 0;
+  transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.faq-answer.faq-open {
+  max-height: 200px;
 }
 
 /* ─── Generic section badge ─── */
@@ -268,3 +272,4 @@ body {
 /* Legacy aliases (kept for safety) */
 .reveal-block { opacity:0; transform:translateY(24px); transition:opacity .7s ease,transform .7s cubic-bezier(0.22,1,0.36,1); }
 .reveal-block.is-visible { opacity:1; transform:none; }
+

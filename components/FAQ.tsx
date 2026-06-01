@@ -69,14 +69,14 @@ export default function FAQ() {
                     </span>
                   </button>
 
-                  {isOpen && (
+                  <div className={`faq-answer ${isOpen ? 'faq-open' : ''}`}>
                     <div
                       className="px-6 pb-5 text-sm leading-relaxed"
                       style={{ color: '#57534e', background: 'var(--color-mint)' }}
                     >
                       {faq.a}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             )

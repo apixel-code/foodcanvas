@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Hind_Siliguri } from 'next/font/google'
 import './globals.css'
+import FloatingButtons from '@/components/FloatingButtons'
 
 const hind = Hind_Siliguri({
   subsets: ['bengali', 'latin'],
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="bn" className={hind.variable}>
       <body className="min-h-full antialiased" style={{ fontFamily: 'var(--font-bangla)' }}>
         {children}
+        <FloatingButtons />
       </body>
     </html>
   )
