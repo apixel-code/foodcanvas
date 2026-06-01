@@ -234,7 +234,7 @@ export default function OrderForm() {
                 <p className="text-xs text-stone-400">
                   {form.district === 'ঢাকা'
                     ? '📍 ঢাকা: ৳১২০/কেজি ডেলিভারি'
-                    : '📍 ঢাকার বাইরে: ৳১৪০/কেজি ডেলিভারি'}
+                    : '📍 ঢাকার বাইরে: ৳৯৯/কেজি ডেলিভারি'}
                 </p>
               )}
 

@@ -14,7 +14,7 @@ const products = [
     badgeStyle: { background: 'var(--color-primary-pale)', color: 'var(--color-primary)' },
     weight: '১ কেজি',
     mangoes: '৫–৭টি আম',
-    price: '১৪০ টাকা/কেজি',
+    price: '৯৯ টাকা/কেজি',
     delivery: '+ ডেলিভারি চার্জ',
     features: ['তাজা হিমসাগর', 'প্রিমিয়াম প্যাক', 'কেমিক্যাল মুক্ত'],
     popular: false,
@@ -31,7 +31,7 @@ const products = [
     badgeStyle: { background: '#e8721e', color: '#fff' },
     weight: '৫ কেজি',
     mangoes: '২৫–৩৫টি আম',
-    price: '১৪০ টাকা/কেজি',
+    price: '৯৯ টাকা/কেজি',
     delivery: 'ঢাকায় সাশ্রয়ী ডেলিভারি',
     features: ['সাশ্রয়ী প্যাক', 'পরিবারের জন্য আদর্শ', 'বিশেষ ছাড়'],
     popular: true,
@@ -48,7 +48,7 @@ const products = [
     badgeStyle: { background: 'var(--color-primary)', color: '#fff' },
     weight: '১০ কেজি',
     mangoes: '৫০–৭০টি আম',
-    price: '১৪০ টাকা/কেজি',
+    price: '৯৯ টাকা/কেজি',
     delivery: 'সারাদেশে ডেলিভারি',
     features: ['সর্বোচ্চ সাশ্রয়', 'অফিস/গিফট প্যাক', 'বিশেষ ডিসকাউন্ট'],
     popular: false,
@@ -192,7 +192,7 @@ export default function Products() {
 
         {/* Note */}
         <p className="text-center text-stone-400 text-sm mt-8">
-          * সব প্যাকেজেই ১৪০ টাকা/কেজি হারে মূল্য।&nbsp;
+          * সব প্যাকেজেই ৯৯ টাকা/কেজি হারে মূল্য।&nbsp;
           ডেলিভারি চার্জ জেলাভেদে আলাদা। অর্ডার করার সময় জানানো হবে।
         </p>
       </div>

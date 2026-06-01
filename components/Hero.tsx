@@ -105,7 +105,7 @@ export default function Hero() {
         >
           <span className="text-white/55 text-sm mb-1">এই মৌসুমে বিশেষ মূল্য</span>
           <span className="text-white font-bold" style={{ fontSize: 'clamp(2rem, 5vw, 2.75rem)', lineHeight: 1.1 }}>
-            মাত্র <span style={{ color: '#f87171' }}>১৪০ টাকা</span>/কেজি
+            মাত্র <span style={{ color: '#f87171' }}>৯৯ টাকা</span>/কেজি
           </span>
           <span
             className="text-xs font-bold uppercase tracking-widest mt-2 px-3 py-1 rounded-full"
