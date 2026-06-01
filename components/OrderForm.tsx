@@ -2,6 +2,32 @@
 import { useState } from 'react'
 import Image from 'next/image'
 
+// bKash official brand color: #E2136E
+// SVG drawn as: pink circle + white lowercase "b" letterform (stem + D-bowl)
+function BkashLogo({ size = 36 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="bKash"
+    >
+      {/* Hot-pink circle background */}
+      <circle cx="50" cy="50" r="50" fill="#E2136E" />
+
+      {/* "b" — vertical stem */}
+      <rect x="30" y="16" width="14" height="68" rx="7" fill="white" />
+
+      {/* "b" — right-facing D bowl (perfect semicircle):
+          start (44, 42) → sweep clockwise → end (44, 76)
+          center = (44, 59), radius = 17                     */}
+      <path d="M 44 42 A 17 17 0 0 1 44 76 Z" fill="white" />
+    </svg>
+  )
+}
+
 const districts = [
   'ঢাকা','চট্টগ্রাম','রাজশাহী','খুলনা','বরিশাল','সিলেট','রংপুর','ময়মনসিংহ',
   'নারায়ণগঞ্জ','গাজীপুর','টাঙ্গাইল','কিশোরগঞ্জ','মানিকগঞ্জ','মুন্সিগঞ্জ','নরসিংদী',
@@ -341,23 +367,40 @@ export default function OrderForm() {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 {[
                   { id: 'cod',             label: 'ক্যাশ অন ডেলিভারি', icon: '💵', desc: 'পণ্য পেয়ে পরিশোধ' },
-                  { id: 'bkash_personal',  label: 'বিকাশ পার্সোনাল',   icon: '💜', desc: BKASH_PERSONAL },
-                  { id: 'bkash_merchant',  label: 'বিকাশ মার্চেন্ট',   icon: '🏪', desc: BKASH_MERCHANT },
+                  { id: 'bkash_personal',  label: 'বিকাশ পার্সোনাল',   icon: '',    desc: BKASH_PERSONAL },
+                  { id: 'bkash_merchant',  label: 'বিকাশ মার্চেন্ট',   icon: '',    desc: BKASH_MERCHANT },
                 ].map(pm => {
-                  const active = payment === pm.id
+                  const active   = payment === pm.id
+                  const isBkash  = pm.id.startsWith('bkash')
                   return (
                     <label
                       key={pm.id}
                       className="flex flex-col items-center gap-1.5 p-4 rounded-2xl border-2 cursor-pointer transition-all text-center"
                       style={{
-                        borderColor: active ? 'var(--color-primary)' : '#e5e7eb',
-                        background:  active ? 'var(--color-primary-pale)' : 'white',
+                        borderColor: active ? (isBkash ? '#E2136E' : 'var(--color-primary)') : '#e5e7eb',
+                        background:  active ? (isBkash ? '#fff0f6'  : 'var(--color-primary-pale)') : 'white',
                       }}
                     >
                       <input type="radio" name="payment" value={pm.id} checked={active} onChange={() => setPayment(pm.id)} className="hidden" />
-                      <span className="text-2xl">{pm.icon}</span>
-                      <span className="text-xs font-bold" style={{ color: active ? 'var(--color-primary)' : '#374151' }}>{pm.label}</span>
-                      <span className="text-xs" style={{ color: active ? 'var(--color-primary)' : '#9ca3af' }}>{pm.desc}</span>
+
+                      {isBkash ? (
+                        <BkashLogo size={36} />
+                      ) : (
+                        <span className="text-2xl">{pm.icon}</span>
+                      )}
+
+                      <span
+                        className="text-xs font-bold"
+                        style={{ color: active ? (isBkash ? '#E2136E' : 'var(--color-primary)') : '#374151' }}
+                      >
+                        {pm.label}
+                      </span>
+                      <span
+                        className="text-xs"
+                        style={{ color: active ? (isBkash ? '#c40f5b' : 'var(--color-primary)') : '#9ca3af' }}
+                      >
+                        {pm.desc}
+                      </span>
                     </label>
                   )
                 })}
@@ -367,36 +410,48 @@ export default function OrderForm() {
               {isBkash && (
                 <div
                   className="rounded-2xl p-5 space-y-3"
-                  style={{ background: '#fdf4ff', border: '1.5px solid #d8b4fe' }}
+                  style={{ background: '#fff0f6', border: '1.5px solid #f9a8d4' }}
                 >
-                  <p className="font-bold text-sm text-purple-800">📋 বিকাশে পেমেন্ট করার নিয়ম</p>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between rounded-xl px-4 py-3 text-sm" style={{ background: 'white', border: '1px solid #e9d5ff' }}>
-                      <div>
-                        <p className="text-xs text-purple-500 font-semibold">Account Type</p>
-                        <p className="font-bold text-purple-900">
-                          {payment === 'bkash_personal' ? 'Personal Account' : 'Merchant Account'}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-xs text-purple-500 font-semibold">Number</p>
-                        <p className="font-bold text-purple-900 text-base tracking-widest">
-                          {payment === 'bkash_personal' ? BKASH_PERSONAL : BKASH_MERCHANT}
-                        </p>
-                      </div>
+                  {/* Header with bKash logo */}
+                  <div className="flex items-center gap-2">
+                    <BkashLogo size={24} />
+                    <p className="font-bold text-sm" style={{ color: '#9d0040' }}>
+                      বিকাশে পেমেন্ট করার নিয়ম
+                    </p>
+                  </div>
+
+                  <div
+                    className="flex items-center justify-between rounded-xl px-4 py-3 text-sm"
+                    style={{ background: 'white', border: '1px solid #fecdd3' }}
+                  >
+                    <div>
+                      <p className="text-xs font-semibold" style={{ color: '#E2136E' }}>Account Type</p>
+                      <p className="font-bold" style={{ color: '#9d0040' }}>
+                        {payment === 'bkash_personal' ? 'Personal Account' : 'Merchant Account'}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs font-semibold" style={{ color: '#E2136E' }}>Number</p>
+                      <p className="font-bold text-base tracking-widest" style={{ color: '#9d0040' }}>
+                        {payment === 'bkash_personal' ? BKASH_PERSONAL : BKASH_MERCHANT}
+                      </p>
                     </div>
                   </div>
-                  <ol className="text-xs text-purple-700 space-y-1 list-decimal list-inside">
+
+                  <ol className="text-xs space-y-1 list-decimal list-inside" style={{ color: '#be185d' }}>
                     <li>উপরের নম্বরে পেমেন্ট পাঠান (Send Money বা Payment)</li>
                     <li>ট্রানজেকশন ID সংগ্রহ করুন</li>
                     <li>নিচের ঘরে সেই ID লিখুন</li>
                   </ol>
 
                   <div>
-                    <label className={lbl + ' text-purple-800'}>ট্রানজেকশন ID *</label>
+                    <label className={lbl} style={{ color: '#9d0040' }}>ট্রানজেকশন ID *</label>
                     <input
                       type="text"
-                      className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent bg-white text-stone-800 text-sm transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white text-stone-800 text-sm transition-all"
+                      style={{ border: '2px solid #fda4af', outline: 'none' }}
+                      onFocus={e  => (e.currentTarget.style.borderColor = '#E2136E')}
+                      onBlur={e   => (e.currentTarget.style.borderColor = '#fda4af')}
                       placeholder="যেমন: 8HJ3K2LM9N"
                       value={txId}
                       onChange={e => setTxId(e.target.value)}
