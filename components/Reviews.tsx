@@ -23,11 +23,11 @@ const stats = [
   { num: '৪.৯/৫', label: 'গড় রেটিং' },
 ]
 
-const REVIEW_ANIMS = ['anim-left', 'anim-flip', 'anim-right'] as const
+// Duplicate the array so the marquee loops seamlessly (track = 2× content → animate -50%)
+const marqueeItems = [...reviews, ...reviews]
 
 export default function Reviews() {
   const { ref: headerRef, inView: headerVisible } = useInView()
-  const { ref: cardsRef,  inView: cardsVisible  } = useInView()
   const { ref: statsRef,  inView: statsVisible  } = useInView()
 
   return (
@@ -50,13 +50,37 @@ export default function Reviews() {
           </p>
         </div>
 
-        {/* Review cards — left, 3D-flip, right */}
-        <div ref={cardsRef} className={`grid grid-cols-1 md:grid-cols-3 gap-6 mb-14 reveal-parent ${cardsVisible ? 'is-visible' : ''}`}>
-          {reviews.map((r, i) => (
-            <div key={i} className={`${REVIEW_ANIMS[i]} reveal-d-${i + 1}`}>
+        {/* ── Marquee: cards scroll right → left ── */}
+        <div
+          className="mb-14"
+          style={{
+            overflowX: 'hidden',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+            maskImage:        'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+          }}
+        >
+          {/* track: marginRight on each card (not gap) so -50% = exact one-set width */}
+          <div
+            style={{
+              display: 'flex',
+              width: 'max-content',
+              animation: 'marquee-rtl 28s linear infinite',
+              willChange: 'transform',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.animationPlayState = 'paused')}
+            onMouseLeave={e => (e.currentTarget.style.animationPlayState = 'running')}
+          >
+            {marqueeItems.map((r, i) => (
               <div
-                className="review-card rounded-2xl p-7 flex flex-col gap-5 h-full"
-                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)' }}
+                key={i}
+                className="review-card rounded-2xl p-7 flex flex-col gap-5"
+                style={{
+                  width: 320,
+                  marginRight: 24,
+                  flexShrink: 0,
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.09)',
+                }}
               >
                 <span className="text-5xl font-serif" style={{ color: 'rgba(201,162,39,0.3)', lineHeight: 0.8 }}>"</span>
 
@@ -89,11 +113,11 @@ export default function Reviews() {
                   </span>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
-        {/* Stats strip — each stat zooms in */}
+        {/* Stats strip */}
         <div
           ref={statsRef}
           className={`rounded-2xl p-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center reveal-parent ${statsVisible ? 'is-visible' : ''}`}

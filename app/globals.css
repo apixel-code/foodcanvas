@@ -273,3 +273,16 @@ body {
 .reveal-block { opacity:0; transform:translateY(24px); transition:opacity .7s ease,transform .7s cubic-bezier(0.22,1,0.36,1); }
 .reveal-block.is-visible { opacity:1; transform:none; }
 
+/* ─── Reviews marquee (right → left infinite scroll) ─── */
+@keyframes marquee-rtl {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  animation: marquee-rtl 30s linear infinite;
+  will-change: transform;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
