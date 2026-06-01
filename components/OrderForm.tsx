@@ -45,8 +45,7 @@ const PACKAGES = [
   },
 ]
 
-const DELIVERY_DHAKA   = 120
-const DELIVERY_OUTSIDE = 140
+const DELIVERY_PER_KG = 20
 
 const BKASH_PERSONAL = '01972312458'
 const BKASH_MERCHANT = '01752952571'
@@ -71,8 +70,7 @@ export default function OrderForm() {
   const pkg          = PACKAGES.find(p => p.id === selectedId)!
   const productTotal = pkg.price * qty
   const totalKg      = pkg.kg * qty
-  const deliveryRate = district === 'ঢাকা' ? DELIVERY_DHAKA : DELIVERY_OUTSIDE
-  const deliveryAmt  = district ? totalKg * deliveryRate : 0
+  const deliveryAmt  = totalKg * DELIVERY_PER_KG
   const grandTotal   = productTotal + deliveryAmt
   const isBkash      = payment === 'bkash_personal' || payment === 'bkash_merchant'
 
@@ -297,22 +295,14 @@ export default function OrderForm() {
                   <div className="flex justify-between text-stone-600">
                     <span>
                       ডেলিভারি
-                      {district && <span className="text-stone-400 text-xs ml-1">({totalKg}কেজি × ৳{deliveryRate})</span>}
+                      <span className="text-stone-400 text-xs ml-1">({totalKg}কেজি × ৳{DELIVERY_PER_KG})</span>
                     </span>
-                    <span className="font-semibold">
-                      {district ? `৳${deliveryAmt.toLocaleString('bn-BD')}` : '—'}
-                    </span>
+                    <span className="font-semibold">৳{deliveryAmt.toLocaleString('bn-BD')}</span>
                   </div>
-                  {district && (
-                    <p className="text-xs text-stone-400">
-                      {district === 'ঢাকা' ? '📍 ঢাকা: ৳১২০/কেজি' : '📍 ঢাকার বাইরে: ৳১৪০/কেজি'}
-                    </p>
-                  )}
+                  <p className="text-xs text-stone-400">📍 সারাদেশে: ৳{DELIVERY_PER_KG}/কেজি</p>
                   <div className="flex justify-between font-bold text-base pt-2 border-t border-stone-200">
                     <span style={{ color: 'var(--color-primary)' }}>মোট</span>
-                    <span style={{ color: '#dc2626' }}>
-                      {district ? `৳${grandTotal.toLocaleString('bn-BD')}` : '—'}
-                    </span>
+                    <span style={{ color: '#dc2626' }}>৳{grandTotal.toLocaleString('bn-BD')}</span>
                   </div>
                 </div>
 

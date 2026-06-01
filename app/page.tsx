@@ -6,6 +6,7 @@ import HowToOrder from '@/components/HowToOrder'
 import Reviews from '@/components/Reviews'
 import ContactBar from '@/components/ContactBar'
 import OrderForm from '@/components/OrderForm'
+import OrderTracking from '@/components/OrderTracking'
 import FAQ from '@/components/FAQ'
 import Footer from '@/components/Footer'
 
@@ -20,6 +21,7 @@ export default function Home() {
       <Reviews />
       <ContactBar />
       <OrderForm />
+      <OrderTracking />
       <FAQ />
       <Footer />
 
