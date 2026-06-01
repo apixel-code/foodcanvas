@@ -66,7 +66,11 @@ export async function POST(req: NextRequest) {
   let trackingCode  = ''
   let consignmentId = ''
 
-  try {
+  // Dev mock: bypass Steadfast when STEADFAST_MOCK=true (local DNS can't reach steadfast)
+  if (process.env.STEADFAST_MOCK === 'true') {
+    trackingCode  = `DEV-${Date.now()}`
+    consignmentId = `DEV-CON-${Date.now()}`
+  } else try {
     const sfRes = await fetch('https://portal.steadfast.com.bd/api/v1/create_order', {
       method: 'POST',
       headers: {
@@ -112,7 +116,7 @@ export async function POST(req: NextRequest) {
       { error: 'কুরিয়ার সার্ভিসে সংযোগ সমস্যা। একটু পরে আবার চেষ্টা করুন।' },
       { status: 503 },
     )
-  }
+  } // end Steadfast block
 
   // ── Step 2: Save to Google Sheets (with tracking data) ────────────────────
   // Steadfast consignment is already created at this point.
