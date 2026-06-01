@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
     trackingCode  = `DEV-${Date.now()}`
     consignmentId = `DEV-CON-${Date.now()}`
   } else try {
-    const sfRes = await fetch('https://portal.steadfast.com.bd/api/v1/create_order', {
+    const sfRes = await fetch('https://steadfast.com.bd/api/v1/create_order', {
       method: 'POST',
       headers: {
         'Api-Key':      process.env.STEADFAST_API_KEY!,
