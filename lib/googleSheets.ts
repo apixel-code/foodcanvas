@@ -1,20 +1,24 @@
 import { google } from 'googleapis'
 
-const PRICE_PER_KG    = 20
-const DELIVERY_PER_KG = 20
+// Product price matches OrderForm PACKAGES (৳99/kg)
+const PRICE_PER_KG    = 99
+const DELIVERY_PER_KG = 20   // flat delivery rate, location-independent
 
 function calcPrices(quantity: string) {
   const kg       = parseFloat(quantity) || 0
   const product  = kg * PRICE_PER_KG
   const delivery = kg * DELIVERY_PER_KG
-  return { kg, product, delivery, total: product + delivery, rate: DELIVERY_PER_KG }
+  return { kg, product, delivery, total: product + delivery }
 }
 
-// Column N (index 13) → admin fills this after creating shipment on Steadfast portal
+// A=Timestamp B=নাম C=মোবাইল D=ঠিকানা E=জেলা F=পরিমাণ G=পণ্যমূল্য
+// H=ডেলিভারি I=মোট J=পেমেন্ট K=ট্রানজেকশনID L=নোট M=স্ট্যাটাস
+// N=Tracking Code  O=Consignment ID
 const HEADERS = [
   'Timestamp', 'নাম', 'মোবাইল', 'ঠিকানা', 'জেলা',
   'পরিমাণ (কেজি)', 'পণ্যমূল্য', 'ডেলিভারি চার্জ', 'মোট', 'পেমেন্ট',
-  'ট্রানজেকশন ID', 'নোট', 'স্ট্যাটাস', 'Steadfast Tracking Code',
+  'ট্রানজেকশন ID', 'নোট', 'স্ট্যাটাস',
+  'Steadfast Tracking Code', 'Steadfast Consignment ID',
 ]
 
 // ─── Shared auth helper ───────────────────────────────────────────────────────
@@ -32,87 +36,98 @@ function getAuth(readonly = false) {
   })
 }
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-export interface OrderTrackingInfo {
-  timestamp:    string
-  name:         string
-  phone:        string
-  district:     string
-  quantity:     string
-  total:        string
-  status:       string
-  trackingCode: string
+// ─── Shared sheet-name resolver ───────────────────────────────────────────────
+async function getSheetName(sheets: ReturnType<typeof google.sheets>, spreadsheetId: string) {
+  const meta = await sheets.spreadsheets.get({ spreadsheetId })
+  return meta.data.sheets?.[0]?.properties?.title ?? 'Sheet1'
 }
 
+// ─── Types ────────────────────────────────────────────────────────────────────
+export interface OrderTrackingInfo {
+  timestamp:     string
+  name:          string
+  phone:         string
+  district:      string
+  quantity:      string
+  total:         string
+  status:        string
+  trackingCode:  string
+  consignmentId: string
+}
+
+// ─── Append one order row (including Steadfast tracking data) ─────────────────
+// trackingCode and consignmentId are auto-filled by /api/place-order
+// before this function is called; no manual step required.
 export async function appendOrderToSheet(orderData: Record<string, string>) {
-  const auth = getAuth()
-
-  const sheets = google.sheets({ version: 'v4', auth })
+  const sheets        = google.sheets({ version: 'v4', auth: getAuth() })
   const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID!
+  const sheetName     = await getSheetName(sheets, spreadsheetId)
 
-  // প্রথম sheet-এর নাম খুঁজে বের করো
-  const meta = await sheets.spreadsheets.get({ spreadsheetId })
-  const sheetName = meta.data.sheets?.[0]?.properties?.title ?? 'Sheet1'
-  const range = `${sheetName}!A:M`
-
-  // Sheet খালি থাকলে header row যোগ করো (A:N — tracking code কলামসহ)
-  const existing = await sheets.spreadsheets.values.get({ spreadsheetId, range: `${sheetName}!A1` })
+  // Write headers on first-ever use
+  const existing = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `${sheetName}!A1`,
+  })
   if (!existing.data.values || existing.data.values.length === 0) {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range: `${sheetName}!A1:N1`,
+      range:            `${sheetName}!A1:O1`,
       valueInputOption: 'USER_ENTERED',
-      requestBody: { values: [HEADERS] },
+      requestBody:      { values: [HEADERS] },
     })
   }
 
-  const { kg, product, delivery, total, rate } = calcPrices(orderData.quantity)
+  const { kg, product, delivery, total } = calcPrices(orderData.quantity)
 
   const paymentLabel =
-    orderData.payment === 'cod'   ? 'ক্যাশ অন ডেলিভারি'
-    : orderData.payment === 'bkash' ? 'বিকাশ'
-    : 'নগদ'
+    orderData.payment === 'cod'             ? 'ক্যাশ অন ডেলিভারি'
+    : orderData.payment === 'bkash_personal'  ? 'বিকাশ পার্সোনাল'
+    : orderData.payment === 'bkash_merchant'  ? 'বিকাশ মার্চেন্ট'
+    : orderData.payment === 'nagad'           ? 'নগদ'
+    : orderData.payment
 
   const row = [
-    new Date().toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka' }),
-    orderData.name,
-    orderData.phone,
-    orderData.address,
-    orderData.district,
-    `${kg} কেজি`,
-    `৳${product} (${kg}kg × ৳${PRICE_PER_KG})`,
-    `৳${delivery} (${kg}kg × ৳${rate})`,
-    `৳${total}`,
-    paymentLabel,
-    orderData.transactionId || '—',
-    orderData.note || '—',
-    'নতুন অর্ডার',
+    new Date().toLocaleString('bn-BD', { timeZone: 'Asia/Dhaka' }),  // A
+    orderData.name,                                                   // B
+    orderData.phone,                                                  // C
+    orderData.address,                                                // D
+    orderData.district,                                               // E
+    `${kg} কেজি`,                                                    // F
+    `৳${product} (${kg}kg × ৳${PRICE_PER_KG})`,                     // G
+    `৳${delivery} (${kg}kg × ৳${DELIVERY_PER_KG})`,                 // H
+    `৳${total}`,                                                      // I
+    paymentLabel,                                                      // J
+    orderData.transactionId || '—',                                   // K
+    orderData.note         || '—',                                    // L
+    'নতুন অর্ডার',                                                   // M
+    orderData.trackingCode  || '',                                    // N ← auto
+    orderData.consignmentId || '',                                    // O ← auto
   ]
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range,
+    range:            `${sheetName}!A:O`,
     valueInputOption: 'USER_ENTERED',
-    requestBody: { values: [row] },
+    requestBody:      { values: [row] },
   })
 
   return { success: true, total }
 }
 
-// ─── Order lookup by phone (for tracking) ─────────────────────────────────────
-// Reads columns A:N and returns the MOST RECENT row matching the phone number.
-// Column N (index 13) = Steadfast Tracking Code, filled by admin after shipping.
+// ─── Find the most recent order by phone number ───────────────────────────────
+// Used by /api/track-order to look up tracking code from column N.
 export async function getOrderByPhone(phone: string): Promise<OrderTrackingInfo | null> {
-  const sheets       = google.sheets({ version: 'v4', auth: getAuth(true) })
+  const sheets        = google.sheets({ version: 'v4', auth: getAuth(true) })
   const spreadsheetId = process.env.GOOGLE_SPREADSHEET_ID!
+  const sheetName     = await getSheetName(sheets, spreadsheetId)
 
-  const meta      = await sheets.spreadsheets.get({ spreadsheetId })
-  const sheetName = meta.data.sheets?.[0]?.properties?.title ?? 'Sheet1'
-
-  const res  = await sheets.spreadsheets.values.get({ spreadsheetId, range: `${sheetName}!A:N` })
+  const res  = await sheets.spreadsheets.values.get({
+    spreadsheetId,
+    range: `${sheetName}!A:O`,
+  })
   const rows = res.data.values ?? []
 
-  // Row 0 is the header; data starts at row 1. Iterate bottom-up for most recent.
+  // Row 0 is the header; data starts at row 1. Search bottom-up for most recent.
   const normalizedPhone = phone.replace(/\s/g, '')
   for (let i = rows.length - 1; i >= 1; i--) {
     const row      = rows[i]
@@ -120,14 +135,15 @@ export async function getOrderByPhone(phone: string): Promise<OrderTrackingInfo 
     if (rowPhone !== normalizedPhone) continue
 
     return {
-      timestamp:    String(row[0]  ?? ''),
-      name:         String(row[1]  ?? ''),
-      phone:        String(row[2]  ?? ''),
-      district:     String(row[4]  ?? ''),
-      quantity:     String(row[5]  ?? ''),
-      total:        String(row[8]  ?? ''),
-      status:       String(row[12] ?? 'নতুন অর্ডার'),
-      trackingCode: String(row[13] ?? ''),
+      timestamp:     String(row[0]  ?? ''),
+      name:          String(row[1]  ?? ''),
+      phone:         String(row[2]  ?? ''),
+      district:      String(row[4]  ?? ''),
+      quantity:      String(row[5]  ?? ''),
+      total:         String(row[8]  ?? ''),
+      status:        String(row[12] ?? 'নতুন অর্ডার'),
+      trackingCode:  String(row[13] ?? ''),  // N
+      consignmentId: String(row[14] ?? ''),  // O
     }
   }
 

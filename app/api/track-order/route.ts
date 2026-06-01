@@ -44,7 +44,8 @@ export async function GET(req: NextRequest) {
     )
   }
 
-  // ── Step 2: If no tracking code yet, return order without Steadfast data ──
+  // ── Step 2: Tracking code is saved automatically by /api/place-order.
+  //    If empty, the Steadfast call hasn't happened yet (edge case).
   if (!order.trackingCode) {
     return NextResponse.json({ order, tracking: null })
   }

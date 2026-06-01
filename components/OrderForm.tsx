@@ -63,9 +63,10 @@ export default function OrderForm() {
   const [payment, setPayment]       = useState('cod')
   const [txId, setTxId]             = useState('')
   const [note, setNote]             = useState('')
-  const [loading, setLoading]       = useState(false)
-  const [success, setSuccess]       = useState(false)
-  const [error, setError]           = useState('')
+  const [loading,      setLoading]      = useState(false)
+  const [success,      setSuccess]      = useState(false)
+  const [trackingCode, setTrackingCode] = useState('')
+  const [error,        setError]        = useState('')
 
   const pkg          = PACKAGES.find(p => p.id === selectedId)!
   const productTotal = pkg.price * qty
@@ -80,7 +81,7 @@ export default function OrderForm() {
     if (isBkash && !txId)    { setError('ট্রানজেকশন ID দিন।'); return }
     setLoading(true); setError('')
     try {
-      const res = await fetch('/api/order', {
+      const res = await fetch('/api/place-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,12 +89,12 @@ export default function OrderForm() {
           quantity: String(totalKg),
           payment, transactionId: txId, note,
           package: pkg.name,
-          packages_qty: qty,
-          timestamp: new Date().toISOString(),
+          packages_qty: String(qty),
         }),
       })
       const data = await res.json()
       if (res.ok) {
+        setTrackingCode(data.tracking_code || '')
         setSuccess(true)
         setName(''); setPhone(''); setAddress(''); setDistrict('')
         setTxId(''); setNote(''); setQty(1); setSelectedId('5kg'); setPayment('cod')
@@ -122,11 +123,27 @@ export default function OrderForm() {
 
         {/* Success */}
         {success && (
-          <div className="rounded-2xl p-10 text-center" style={{ background: '#d1fae5', border: '2px solid #6ee7b7' }}>
-            <p className="text-5xl mb-4">✅</p>
-            <p className="font-bold text-green-800 text-xl mb-1">অর্ডার সফলভাবে জমা হয়েছে!</p>
-            <p className="text-sm text-green-700 mb-4">শীঘ্রই আপনাকে কল করা হবে।</p>
-            <button onClick={() => setSuccess(false)} className="text-xs underline text-green-700">
+          <div className="rounded-2xl p-8 text-center space-y-4" style={{ background: '#d1fae5', border: '2px solid #6ee7b7' }}>
+            <p className="text-5xl">✅</p>
+            <p className="font-bold text-green-800 text-xl">অর্ডার সফলভাবে নিশ্চিত হয়েছে!</p>
+            <p className="text-sm text-green-700">
+              Steadfast Courier-এ শিপমেন্ট তৈরি হয়েছে। শীঘ্রই ডেলিভারি হবে।
+            </p>
+
+            {trackingCode && (
+              <div className="rounded-xl px-5 py-4 mx-auto max-w-xs" style={{ background: 'white', border: '1px solid #a7f3d0' }}>
+                <p className="text-xs font-bold text-green-600 mb-1 uppercase tracking-widest">আপনার ট্র্যাকিং কোড</p>
+                <p className="font-mono font-bold text-lg tracking-widest text-green-900">{trackingCode}</p>
+                <p className="text-xs text-green-600 mt-1">
+                  নিচের <strong>"অর্ডার ট্র্যাকিং"</strong> সেকশনে ফোন নম্বর দিয়ে স্ট্যাটাস দেখুন
+                </p>
+              </div>
+            )}
+
+            <button
+              onClick={() => { setSuccess(false); setTrackingCode('') }}
+              className="text-xs underline text-green-700"
+            >
               আরেকটি অর্ডার করুন
             </button>
           </div>
