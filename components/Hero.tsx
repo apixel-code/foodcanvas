@@ -3,12 +3,12 @@ import Image from 'next/image'
 import { useState, useEffect } from 'react'
 
 const bgImages = [
-  { src: 'https://images.unsplash.com/photo-1501746877-14782df58970?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'তাজা হিমসাগর আম — স্তূপ' },
-  { src: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'রাজশাহীর পাকা হিমসাগর আম' },
-  { src: 'https://images.unsplash.com/photo-1519096845289-95806ee03a1a?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'বাজারের সেরা পাকা আম' },
-  { src: 'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'তাজা পাকা আম কাছ থেকে' },
-  { src: 'https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'হাতে তোলা তাজা আম' },
-  { src: 'https://images.unsplash.com/photo-1622955658214-d05c1c6fcf84?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'গাছে পাকা হিমসাগর আম' },
+  { src: 'https://images.unsplash.com/photo-1685478677352-43868751fb8e?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'গাছে ঝুলন্ত তাজা কাঁচা আম' },
+  { src: 'https://images.unsplash.com/photo-1501746877-14782df58970?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'পাকা হিমসাগর আমের স্তূপ' },
+  { src: 'https://images.unsplash.com/photo-1672709904166-c551e5051eb2?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'গাছের ডালে থোকা থোকা কাঁচা আম' },
+  { src: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'রাজশাহীর পাকা হলুদ আম' },
+  { src: 'https://images.unsplash.com/photo-1630552358140-c50ab1c5f8be?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'বাজারের ঝুড়িতে কাঁচা আম' },
+  { src: 'https://images.unsplash.com/photo-1519096845289-95806ee03a1a?w=1920&h=1080&fit=crop&q=85&auto=format', alt: 'ট্রেতে সাজানো পাকা আম' },
 ]
 
 const stats = [

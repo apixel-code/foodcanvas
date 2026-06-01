@@ -7,8 +7,8 @@ const products = [
     id: 1,
     name: '১ কেজি প্যাকেজ',
     images: [
-      'https://images.unsplash.com/photo-1553279768-865429fa0078?w=800&h=600&fit=crop&q=85&auto=format',
-      'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1688492596644-b0e68aa86477?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1685478676925-05548b7bc317?w=800&h=600&fit=crop&q=85&auto=format',
     ],
     badge: 'ট্রায়াল প্যাক',
     badgeStyle: { background: 'var(--color-primary-pale)', color: 'var(--color-primary)' },
@@ -24,8 +24,8 @@ const products = [
     id: 2,
     name: '৫ কেজি প্যাকেজ',
     images: [
-      'https://images.unsplash.com/photo-1501746877-14782df58970?w=800&h=600&fit=crop&q=85&auto=format',
-      'https://images.unsplash.com/photo-1519096845289-95806ee03a1a?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1630552358140-c50ab1c5f8be?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1672709904166-c551e5051eb2?w=800&h=600&fit=crop&q=85&auto=format',
     ],
     badge: '⭐ সবচেয়ে জনপ্রিয়',
     badgeStyle: { background: '#e8721e', color: '#fff' },
@@ -41,8 +41,8 @@ const products = [
     id: 3,
     name: '১০ কেজি প্যাকেজ',
     images: [
-      'https://images.unsplash.com/photo-1605027990121-cbae9e0642df?w=800&h=600&fit=crop&q=85&auto=format',
-      'https://images.unsplash.com/photo-1622955658214-d05c1c6fcf84?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1680008702821-e1b598db30f3?w=800&h=600&fit=crop&q=85&auto=format',
+      'https://images.unsplash.com/photo-1685478677352-43868751fb8e?w=800&h=600&fit=crop&q=85&auto=format',
     ],
     badge: '💎 বেস্ট ভ্যালু',
     badgeStyle: { background: 'var(--color-primary)', color: '#fff' },
