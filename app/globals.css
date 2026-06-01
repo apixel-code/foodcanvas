@@ -101,42 +101,72 @@ body {
   transition: opacity 1.4s ease-in-out;
 }
 
-/* ─── Feature cards (dark section) ─── */
+
+/* ─── Product card ─── */
+.product-card-hover {
+  transition: transform 0.35s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.35s ease, border-color 0.3s;
+  will-change: transform;
+}
+.product-card-hover:hover {
+  transform: translateY(-14px) scale(1.025);
+  box-shadow: 0 32px 72px rgba(0,0,0,0.22), 0 8px 24px rgba(232,114,30,0.18);
+  border-color: rgba(232,114,30,0.55) !important;
+}
+
+/* ─── WhyUs card ─── */
 .why-card {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
-  transition: background 0.3s, border-color 0.3s, transform 0.3s;
+  transition: background 0.3s, border-color 0.3s, transform 0.35s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.35s ease;
   cursor: default;
+  will-change: transform;
 }
 .why-card:hover {
-  background: rgba(201,162,39,0.07);
-  border-color: rgba(201,162,39,0.28);
-  transform: translateY(-5px);
+  background: rgba(201,162,39,0.09);
+  border-color: rgba(201,162,39,0.5) !important;
+  transform: translateY(-12px) scale(1.03);
+  box-shadow: 0 28px 64px rgba(0,0,0,0.45), 0 0 0 1px rgba(201,162,39,0.3), 0 0 40px rgba(201,162,39,0.12);
 }
 .why-icon {
   background: rgba(201,162,39,0.12);
   border: 1px solid rgba(201,162,39,0.22);
-  transition: background 0.3s;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
 }
 .why-card:hover .why-icon {
-  background: rgba(201,162,39,0.22);
-}
-
-/* ─── Product card ─── */
-.product-card-hover {
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.product-card-hover:hover {
-  transform: translateY(-8px);
+  background: rgba(201,162,39,0.25);
+  transform: scale(1.1) rotate(6deg);
+  box-shadow: 0 8px 24px rgba(201,162,39,0.3);
 }
 
 /* ─── Review card ─── */
 .review-card {
-  transition: transform 0.3s, box-shadow 0.3s;
+  transition: transform 0.35s cubic-bezier(0.34,1.3,0.64,1), box-shadow 0.35s ease, border-color 0.3s;
+  will-change: transform;
 }
 .review-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.18);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 32px 72px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.12), 0 0 36px rgba(201,162,39,0.1);
+  border-color: rgba(255,255,255,0.18) !important;
+}
+
+/* ─── FAQ item hover ─── */
+.faq-item {
+  transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1), box-shadow 0.3s ease;
+  will-change: transform;
+}
+.faq-item:hover {
+  transform: translateX(6px);
+  box-shadow: -4px 0 0 0 var(--color-primary), 0 8px 32px rgba(15,61,32,0.1);
+}
+
+/* ─── HowToOrder step hover ─── */
+.step-circle {
+  transition: transform 0.35s cubic-bezier(0.34,1.5,0.64,1), box-shadow 0.35s ease;
+  will-change: transform;
+}
+.step-item:hover .step-circle {
+  transform: scale(1.12) translateY(-4px);
+  box-shadow: 0 16px 40px rgba(15,61,32,0.45), 0 0 0 6px rgba(15,61,32,0.12) !important;
 }
 
 /* ─── Scroll shimmer on hero ─── */
@@ -178,3 +208,63 @@ body {
   padding: 0.375rem 1rem;
   border-radius: 999px;
 }
+
+/* ─── Page-load animations (Hero, Navbar) ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleInBounce {
+  from { opacity: 0; transform: scale(0.88); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.anim-fade-up   { animation: fadeUp         0.75s cubic-bezier(0.22,1,0.36,1)   both; }
+.anim-fade-down { animation: fadeDown        0.65s cubic-bezier(0.22,1,0.36,1)   both; }
+.anim-scale-in  { animation: scaleInBounce   0.65s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+.anim-d100 { animation-delay: 100ms; }
+.anim-d200 { animation-delay: 200ms; }
+.anim-d300 { animation-delay: 300ms; }
+.anim-d400 { animation-delay: 400ms; }
+.anim-d500 { animation-delay: 500ms; }
+.anim-d600 { animation-delay: 600ms; }
+.anim-d700 { animation-delay: 700ms; }
+
+/* ─── Rich scroll animation system ─── */
+
+/* Initial hidden states — each animation type has its own transform */
+.anim-up     { opacity:0; transform:translateY(44px);                                     transition:opacity .65s ease, transform .65s cubic-bezier(0.22,1,0.36,1); }
+.anim-down   { opacity:0; transform:translateY(-36px);                                    transition:opacity .6s  ease, transform .6s  cubic-bezier(0.22,1,0.36,1); }
+.anim-left   { opacity:0; transform:translateX(-56px);                                    transition:opacity .65s ease, transform .65s cubic-bezier(0.22,1,0.36,1); }
+.anim-right  { opacity:0; transform:translateX(56px);                                     transition:opacity .65s ease, transform .65s cubic-bezier(0.22,1,0.36,1); }
+.anim-zoom   { opacity:0; transform:scale(0.76) translateY(20px);                         transition:opacity .55s ease, transform .55s cubic-bezier(0.34,1.56,0.64,1); }
+.anim-blur   { opacity:0; filter:blur(14px); transform:translateY(18px);                  transition:opacity .7s ease, filter .7s ease, transform .7s ease; }
+.anim-flip   { opacity:0; transform:perspective(600px) rotateX(32deg) translateY(30px);   transition:opacity .65s ease, transform .65s cubic-bezier(0.22,1,0.36,1); }
+.anim-rotate { opacity:0; transform:rotate(-9deg) scale(0.87) translateY(24px);           transition:opacity .6s ease,  transform .6s  cubic-bezier(0.34,1.3,0.64,1); }
+
+/* Visible states — triggered when parent has .is-visible */
+.reveal-parent.is-visible .anim-up,
+.reveal-parent.is-visible .anim-down,
+.reveal-parent.is-visible .anim-left,
+.reveal-parent.is-visible .anim-right,
+.reveal-parent.is-visible .anim-zoom,
+.reveal-parent.is-visible .anim-flip,
+.reveal-parent.is-visible .anim-rotate { opacity:1; transform:none; }
+.reveal-parent.is-visible .anim-blur   { opacity:1; filter:blur(0px); transform:none; }
+
+/* Stagger delays — only on enter (no delay on exit = snappy reverse) */
+.reveal-parent.is-visible .reveal-d-1 { transition-delay:   0ms; }
+.reveal-parent.is-visible .reveal-d-2 { transition-delay: 110ms; }
+.reveal-parent.is-visible .reveal-d-3 { transition-delay: 220ms; }
+.reveal-parent.is-visible .reveal-d-4 { transition-delay: 330ms; }
+.reveal-parent.is-visible .reveal-d-5 { transition-delay: 440ms; }
+.reveal-parent.is-visible .reveal-d-6 { transition-delay: 550ms; }
+
+/* Legacy aliases (kept for safety) */
+.reveal-block { opacity:0; transform:translateY(24px); transition:opacity .7s ease,transform .7s cubic-bezier(0.22,1,0.36,1); }
+.reveal-block.is-visible { opacity:1; transform:none; }

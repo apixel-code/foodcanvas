@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import { useState } from 'react'
+import { useInView } from '@/hooks/useInView'
 
 const products = [
   {
@@ -163,30 +164,38 @@ function ProductCard({ p }: { p: (typeof products)[0] }) {
   )
 }
 
+const CARD_ANIMS = ['anim-left', 'anim-zoom', 'anim-right'] as const
+
 export default function Products() {
+  const { ref: headerRef, inView: headerVisible } = useInView()
+  const { ref: cardsRef,  inView: cardsVisible  } = useInView()
+
   return (
     <section id="products" className="py-24 px-4" style={{ background: 'var(--color-cream)' }}>
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
-        <div className="text-center mb-14">
-          <span className="badge-green mb-5">আমাদের প্যাকেজ</span>
+        <div ref={headerRef} className={`text-center mb-14 reveal-parent ${headerVisible ? 'is-visible' : ''}`}>
+          <span className="badge-green mb-5 anim-down reveal-d-1">আমাদের প্যাকেজ</span>
           <h2
-            className="font-bold mb-4 leading-tight"
+            className="font-bold mb-4 leading-tight anim-blur reveal-d-2"
             style={{ color: 'var(--color-primary)', fontSize: 'clamp(1.8rem, 4vw, 2.75rem)' }}
           >
             আপনার পছন্দের প্যাকেজ
             <br />
             <span style={{ color: 'var(--color-accent)' }}>বেছে নিন</span>
           </h2>
-          <p className="text-stone-500 text-lg">
+          <p className="text-stone-500 text-lg anim-up reveal-d-3">
             সরাসরি রাজশাহীর বাগান থেকে — তাজা হিমসাগর আম
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          {products.map((p) => (
-            <ProductCard key={p.id} p={p} />
+        {/* Cards — left, zoom-bounce, right */}
+        <div ref={cardsRef} className={`grid grid-cols-1 md:grid-cols-3 gap-7 reveal-parent ${cardsVisible ? 'is-visible' : ''}`}>
+          {products.map((p, i) => (
+            <div key={p.id} className={`${CARD_ANIMS[i]} reveal-d-${i + 1}`}>
+              <ProductCard p={p} />
+            </div>
           ))}
         </div>
 

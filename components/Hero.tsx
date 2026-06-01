@@ -61,7 +61,7 @@ export default function Hero() {
 
         {/* Premium badge */}
         <div
-          className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full mb-8 text-sm font-semibold"
+          className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full mb-8 text-sm font-semibold anim-fade-down"
           style={{
             background: 'rgba(0,0,0,0.35)',
             border: '1px solid rgba(201,162,39,0.45)',
@@ -78,7 +78,7 @@ export default function Hero() {
 
         {/* Main headline */}
         <h1
-          className="font-bold text-white leading-tight mb-5"
+          className="font-bold text-white leading-tight mb-5 anim-fade-up anim-d200"
           style={{ fontSize: 'clamp(2.4rem, 7vw, 5.25rem)', textShadow: '0 2px 20px rgba(0,0,0,0.4)' }}
         >
           রাজশাহীর সেরা
@@ -88,7 +88,7 @@ export default function Hero() {
 
         {/* Tagline */}
         <p
-          className="text-white/70 mb-10"
+          className="text-white/70 mb-10 anim-fade-up anim-d300"
           style={{ fontSize: 'clamp(1.05rem, 2.5vw, 1.4rem)', fontWeight: 300, letterSpacing: '0.03em' }}
         >
           Food Canvas — তাজা, মিষ্টি, বিশ্বস্ত · আপনার দরজায় পৌঁছে দেই
@@ -96,7 +96,7 @@ export default function Hero() {
 
         {/* Price badge */}
         <div
-          className="inline-flex flex-col items-center rounded-2xl px-10 py-5 mb-10"
+          className="inline-flex flex-col items-center rounded-2xl px-10 py-5 mb-10 anim-scale-in anim-d400"
           style={{
             background: 'rgba(0,0,0,0.45)',
             border: '1px solid rgba(220,38,38,0.4)',
@@ -116,7 +116,7 @@ export default function Hero() {
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16 anim-fade-up anim-d500">
           <a
             href="#order"
             className="inline-flex items-center justify-center gap-2.5 px-10 py-4 rounded-full font-bold text-white text-lg transition-all hover:-translate-y-1"
@@ -140,7 +140,7 @@ export default function Hero() {
         </div>
 
         {/* Stats row */}
-        <div className="flex flex-wrap justify-center gap-x-10 gap-y-5">
+        <div className="flex flex-wrap justify-center gap-x-10 gap-y-5 anim-fade-up anim-d600">
           {stats.map((s) => (
             <div key={s.label} className="text-center">
               <p className="font-bold" style={{ fontSize: 'clamp(1.3rem, 3vw, 1.75rem)', color: '#fbbf24' }}>
