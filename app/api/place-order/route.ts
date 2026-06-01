@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { appendOrderToSheet } from '@/lib/googleSheets'
 
+export const preferredRegion = 'sin1' // Singapore — closest Vercel region to Bangladesh
+
 // Must match OrderForm PACKAGES and lib/googleSheets constants
 const PRICE_PER_KG    = 99
 const DELIVERY_PER_KG = 20
