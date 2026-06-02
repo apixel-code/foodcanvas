@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Hind_Siliguri } from 'next/font/google'
+import { Noto_Sans_Bengali } from 'next/font/google'
 import './globals.css'
 import FloatingButtons from '@/components/FloatingButtons'
 
-const hind = Hind_Siliguri({
+const hind = Noto_Sans_Bengali({
   subsets: ['bengali', 'latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-bangla',

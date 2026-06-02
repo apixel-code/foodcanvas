@@ -201,8 +201,7 @@ export default function Products() {
 
         {/* Note */}
         <p className="text-center text-stone-400 text-sm mt-8">
-          * সব প্যাকেজেই ৯৯ টাকা/কেজি হারে মূল্য।&nbsp;
-          ডেলিভারি চার্জ জেলাভেদে আলাদা। অর্ডার করার সময় জানানো হবে।
+          * সব প্যাকেজেই ৯৯ টাকা/কেজি হারে মূল্য।
         </p>
       </div>
     </section>

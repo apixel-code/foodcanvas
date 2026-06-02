@@ -19,7 +19,7 @@
   --color-border: #e7e5e4;
   --color-mint: #f0fdf4;
   --color-mint-dark: #dcfce7;
-  --font-bangla: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+  --font-bangla: 'Noto Sans Bengali', sans-serif;
 }
 
 :root {
@@ -43,7 +43,7 @@ html { scroll-behavior: smooth; }
 body {
   background-color: var(--color-cream);
   color: #1c1917;
-  font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+  font-family: 'Noto Sans Bengali', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
