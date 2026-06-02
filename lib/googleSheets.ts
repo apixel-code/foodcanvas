@@ -11,11 +11,11 @@ function calcPrices(quantity: string) {
   return { kg, product, delivery, total: product + delivery }
 }
 
-// A=Timestamp B=নাম C=মোবাইল D=ঠিকানা E=জেলা F=পরিমাণ G=পণ্যমূল্য
-// H=ডেলিভারি I=মোট J=পেমেন্ট K=ট্রানজেকশনID L=নোট M=স্ট্যাটাস
-// N=Tracking Code  O=Consignment ID
+// A=Timestamp B=নাম C=মোবাইল D=ঠিকানা E=জেলা F=থানা G=পরিমাণ H=পণ্যমূল্য
+// I=ডেলিভারি J=মোট K=পেমেন্ট L=ট্রানজেকশনID M=নোট N=স্ট্যাটাস
+// O=Tracking Code  P=Consignment ID
 const HEADERS = [
-  'Timestamp', 'নাম', 'মোবাইল', 'ঠিকানা', 'জেলা',
+  'Timestamp', 'নাম', 'মোবাইল', 'ঠিকানা', 'জেলা', 'থানা',
   'পরিমাণ (কেজি)', 'পণ্যমূল্য', 'ডেলিভারি চার্জ', 'মোট', 'পেমেন্ট',
   'ট্রানজেকশন ID', 'নোট', 'স্ট্যাটাস',
   'Steadfast Tracking Code', 'Steadfast Consignment ID',
@@ -50,6 +50,7 @@ export interface OrderTrackingInfo {
   name:          string
   phone:         string
   district:      string
+  thana:         string
   quantity:      string
   total:         string
   status:        string
@@ -73,7 +74,7 @@ export async function appendOrderToSheet(orderData: Record<string, string>) {
   if (!existing.data.values || existing.data.values.length === 0) {
     await sheets.spreadsheets.values.update({
       spreadsheetId,
-      range:            `${sheetName}!A1:O1`,
+      range:            `${sheetName}!A1:P1`,
       valueInputOption: 'USER_ENTERED',
       requestBody:      { values: [HEADERS] },
     })
@@ -94,21 +95,22 @@ export async function appendOrderToSheet(orderData: Record<string, string>) {
     orderData.phone,                                                  // C
     orderData.address,                                                // D
     orderData.district,                                               // E
-    `${kg} কেজি`,                                                    // F
-    `৳${product} (${kg}kg × ৳${PRICE_PER_KG})`,                     // G
-    `৳${delivery} (${kg}kg × ৳${DELIVERY_PER_KG})`,                 // H
-    `৳${total}`,                                                      // I
-    paymentLabel,                                                      // J
-    orderData.transactionId || '—',                                   // K
-    orderData.note         || '—',                                    // L
-    'নতুন অর্ডার',                                                   // M
-    orderData.trackingCode  || '',                                    // N ← auto
-    orderData.consignmentId || '',                                    // O ← auto
+    orderData.thana        || '—',                                    // F
+    `${kg} কেজি`,                                                    // G
+    `৳${product} (${kg}kg × ৳${PRICE_PER_KG})`,                     // H
+    `৳${delivery} (${kg}kg × ৳${DELIVERY_PER_KG})`,                 // I
+    `৳${total}`,                                                      // J
+    paymentLabel,                                                      // K
+    orderData.transactionId || '—',                                   // L
+    orderData.note         || '—',                                    // M
+    'নতুন অর্ডার',                                                   // N
+    orderData.trackingCode  || '',                                    // O ← auto
+    orderData.consignmentId || '',                                    // P ← auto
   ]
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
-    range:            `${sheetName}!A:O`,
+    range:            `${sheetName}!A:P`,
     valueInputOption: 'USER_ENTERED',
     requestBody:      { values: [row] },
   })
@@ -125,7 +127,7 @@ export async function getOrderByPhone(phone: string): Promise<OrderTrackingInfo 
 
   const res  = await sheets.spreadsheets.values.get({
     spreadsheetId,
-    range: `${sheetName}!A:O`,
+    range: `${sheetName}!A:P`,
   })
   const rows = res.data.values ?? []
 
@@ -141,11 +143,12 @@ export async function getOrderByPhone(phone: string): Promise<OrderTrackingInfo 
       name:          String(row[1]  ?? ''),
       phone:         String(row[2]  ?? ''),
       district:      String(row[4]  ?? ''),
-      quantity:      String(row[5]  ?? ''),
-      total:         String(row[8]  ?? ''),
-      status:        String(row[12] ?? 'নতুন অর্ডার'),
-      trackingCode:  String(row[13] ?? ''),  // N
-      consignmentId: String(row[14] ?? ''),  // O
+      thana:         String(row[5]  ?? ''),  // F
+      quantity:      String(row[6]  ?? ''),  // G
+      total:         String(row[9]  ?? ''),  // J
+      status:        String(row[13] ?? 'নতুন অর্ডার'),  // N
+      trackingCode:  String(row[14] ?? ''),  // O
+      consignmentId: String(row[15] ?? ''),  // P
     }
   }
 

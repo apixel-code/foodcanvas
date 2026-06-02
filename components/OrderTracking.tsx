@@ -7,6 +7,7 @@ interface OrderInfo {
   name:         string
   phone:        string
   district:     string
+  thana:        string
   quantity:     string
   total:        string
   status:       string
@@ -209,11 +210,12 @@ function OrderCard({
       <div className="p-5 space-y-4" style={{ background: 'white' }}>
 
         {/* Order details row */}
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: 'জেলা',    value: order.district  || '—' },
-            { label: 'পরিমাণ',  value: order.quantity  || '—' },
-            { label: 'মোট মূল্য', value: order.total   || '—' },
+            { label: 'জেলা',      value: order.district || '—' },
+            { label: 'থানা',      value: order.thana    || '—' },
+            { label: 'পরিমাণ',   value: order.quantity  || '—' },
+            { label: 'মোট মূল্য', value: order.total    || '—' },
           ].map(({ label, value }) => (
             <div
               key={label}

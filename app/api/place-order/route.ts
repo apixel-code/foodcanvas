@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   // ── Input validation ──────────────────────────────────────────────────────
-  if (!body.name || !body.phone || !body.address || !body.district || !body.quantity) {
+  if (!body.name || !body.phone || !body.address || !body.district || !body.thana || !body.quantity) {
     return NextResponse.json(
       { error: 'সব প্রয়োজনীয় তথ্য পূরণ করুন' },
       { status: 400 },
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
         invoice,
         recipient_name:    body.name,
         recipient_phone:   phone,
-        recipient_address: `${body.address}, ${body.district}`,
+        recipient_address: `${body.address}, ${body.thana}, ${body.district}`,
         cod_amount,
         note:   body.note || '',
         weight: kg,
@@ -130,6 +130,7 @@ export async function POST(req: NextRequest) {
       phone,
       address:       body.address,
       district:      body.district,
+      thana:         body.thana,
       quantity:      body.quantity,
       payment:       body.payment,
       transactionId: body.transactionId || '',
