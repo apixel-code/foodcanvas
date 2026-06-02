@@ -22,19 +22,6 @@
   --font-bangla: 'Noto Sans Bengali', sans-serif;
 }
 
-:root {
-  --color-primary: #0f3d20;
-  --color-primary-light: #1a5c2e;
-  --color-primary-pale: #e8f5eb;
-  --color-gold: #c9a227;
-  --color-gold-light: #fffbf0;
-  --color-accent: #e8721e;
-  --color-accent-hover: #d4640f;
-  --color-cream: #fdf6e9;
-  --color-dark: #0a1f0e;
-  --color-mint: #f0fdf4;
-  --color-mint-dark: #dcfce7;
-}
 
 * { box-sizing: border-box; }
 html, body { overflow-x: hidden; max-width: 100%; }

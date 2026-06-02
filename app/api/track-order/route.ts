@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getOrderByPhone } from '@/lib/googleSheets'
 
+export const preferredRegion = 'sin1' // Singapore — closest Vercel region to Bangladesh
+
 // Steadfast delivery_status → human-readable Bangla label + UI color
 export const STEADFAST_STATUS_MAP: Record<string, { label: string; color: string; step: number }> = {
   pending:           { label: 'কুরিয়ারে বুক হয়েছে',       color: '#d97706', step: 1 },
