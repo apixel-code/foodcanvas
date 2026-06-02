@@ -28,6 +28,17 @@ function BkashLogo({ size = 36 }: { size?: number }) {
   )
 }
 
+function NagadLogo({ size = 36 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Nagad">
+      <circle cx="50" cy="50" r="50" fill="#FF6600" />
+      <rect x="26" y="20" width="13" height="60" rx="6.5" fill="white" />
+      <rect x="61" y="20" width="13" height="60" rx="6.5" fill="white" />
+      <line x1="32" y1="23" x2="68" y2="77" stroke="white" strokeWidth="13" strokeLinecap="round" />
+    </svg>
+  )
+}
+
 const districts = [
   'ঢাকা','চট্টগ্রাম','রাজশাহী','খুলনা','বরিশাল','সিলেট','রংপুর','ময়মনসিংহ',
   'নারায়ণগঞ্জ','গাজীপুর','টাঙ্গাইল','কিশোরগঞ্জ','মানিকগঞ্জ','মুন্সিগঞ্জ','নরসিংদী',
@@ -75,6 +86,7 @@ const DELIVERY_PER_KG = 20
 
 const BKASH_PERSONAL = '01972312458'
 const BKASH_MERCHANT = '01752952571'
+const NAGAD_NUMBER   = '01972312458'
 
 const inp  = 'w-full px-4 py-3 rounded-xl border border-stone-200 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-transparent bg-white text-stone-800 text-sm transition-all'
 const lbl  = 'block text-xs font-bold text-stone-500 mb-1.5 uppercase tracking-wider'
@@ -93,18 +105,26 @@ export default function OrderForm() {
   const [success,      setSuccess]      = useState(false)
   const [trackingCode, setTrackingCode] = useState('')
   const [error,        setError]        = useState('')
+  const [copied,       setCopied]       = useState<string | null>(null)
 
   const pkg          = PACKAGES.find(p => p.id === selectedId)!
   const productTotal = pkg.price * qty
   const totalKg      = pkg.kg * qty
   const deliveryAmt  = totalKg * DELIVERY_PER_KG
   const grandTotal   = productTotal + deliveryAmt
-  const isBkash      = payment === 'bkash_personal' || payment === 'bkash_merchant'
+  const isPrePaid    = payment === 'bkash_personal' || payment === 'bkash_merchant' || payment === 'nagad'
+
+  const handleCopy = (text: string, id: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(id)
+      setTimeout(() => setCopied(null), 2000)
+    })
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!district)           { setError('জেলা সিলেক্ট করুন।'); return }
-    if (isBkash && !txId)    { setError('ট্রানজেকশন ID দিন।'); return }
+    if (isPrePaid && !txId)  { setError('ট্রানজেকশন ID দিন।'); return }
     setLoading(true); setError('')
     try {
       const res = await fetch('/api/place-order', {
@@ -364,102 +384,126 @@ export default function OrderForm() {
                 পেমেন্ট পদ্ধতি
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Payment option cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-3">
                 {[
-                  { id: 'cod',             label: 'ক্যাশ অন ডেলিভারি', icon: '💵', desc: 'পণ্য পেয়ে পরিশোধ' },
-                  { id: 'bkash_personal',  label: 'বিকাশ পার্সোনাল',   icon: '',    desc: BKASH_PERSONAL },
-                  { id: 'bkash_merchant',  label: 'বিকাশ মার্চেন্ট',   icon: '',    desc: BKASH_MERCHANT },
+                  { id: 'cod',            label: 'ক্যাশ অন ডেলিভারি', sub: 'পণ্য পেয়ে পরিশোধ', logo: <span className="text-[2rem]">💵</span>, accent: 'var(--color-primary)', bg: 'var(--color-primary-pale)', border: 'var(--color-primary)' },
+                  { id: 'bkash_personal', label: 'বিকাশ পার্সোনাল',   sub: 'Send Money',         logo: <BkashLogo size={34} />,               accent: '#E2136E',              bg: '#fff0f6',                   border: '#E2136E' },
+                  { id: 'bkash_merchant', label: 'বিকাশ মার্চেন্ট',   sub: 'Make Payment',       logo: <BkashLogo size={34} />,               accent: '#E2136E',              bg: '#fff0f6',                   border: '#E2136E' },
+                  { id: 'nagad',          label: 'নগদ',                sub: 'Send Money',         logo: <NagadLogo size={34} />,               accent: '#E05C00',              bg: '#fff7f0',                   border: '#FF6600' },
                 ].map(pm => {
-                  const active   = payment === pm.id
-                  const isBkash  = pm.id.startsWith('bkash')
+                  const active = payment === pm.id
                   return (
                     <label
                       key={pm.id}
-                      className="flex flex-col items-center gap-1.5 p-4 rounded-2xl border-2 cursor-pointer transition-all text-center"
+                      className="flex flex-col items-center gap-1.5 p-3 md:p-4 rounded-2xl border-2 cursor-pointer transition-all text-center select-none min-w-0"
                       style={{
-                        borderColor: active ? (isBkash ? '#E2136E' : 'var(--color-primary)') : '#e5e7eb',
-                        background:  active ? (isBkash ? '#fff0f6'  : 'var(--color-primary-pale)') : 'white',
+                        borderColor: active ? pm.border : '#e5e7eb',
+                        background:  active ? pm.bg     : 'white',
+                        boxShadow:   active ? `0 0 0 3px ${pm.border}22` : 'none',
                       }}
                     >
-                      <input type="radio" name="payment" value={pm.id} checked={active} onChange={() => setPayment(pm.id)} className="hidden" />
-
-                      {isBkash ? (
-                        <BkashLogo size={36} />
-                      ) : (
-                        <span className="text-2xl">{pm.icon}</span>
-                      )}
-
-                      <span
-                        className="text-xs font-bold"
-                        style={{ color: active ? (isBkash ? '#E2136E' : 'var(--color-primary)') : '#374151' }}
-                      >
+                      <input type="radio" name="payment" value={pm.id} checked={active} onChange={() => { setPayment(pm.id); setTxId('') }} className="hidden" />
+                      {pm.logo}
+                      <span className="text-xs font-bold leading-tight w-full" style={{ color: active ? pm.accent : '#374151' }}>
                         {pm.label}
                       </span>
-                      <span
-                        className="text-xs"
-                        style={{ color: active ? (isBkash ? '#c40f5b' : 'var(--color-primary)') : '#9ca3af' }}
-                      >
-                        {pm.desc}
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold whitespace-nowrap" style={{
+                        background: active ? pm.accent : '#f3f4f6',
+                        color:      active ? 'white'   : '#6b7280',
+                      }}>
+                        {pm.sub}
                       </span>
                     </label>
                   )
                 })}
               </div>
 
-              {/* bKash info box */}
-              {isBkash && (
-                <div
-                  className="rounded-2xl p-5 space-y-3"
-                  style={{ background: '#fff0f6', border: '1.5px solid #f9a8d4' }}
-                >
-                  {/* Header with bKash logo */}
-                  <div className="flex items-center gap-2">
-                    <BkashLogo size={24} />
-                    <p className="font-bold text-sm" style={{ color: '#9d0040' }}>
-                      বিকাশে পেমেন্ট করার নিয়ম
-                    </p>
-                  </div>
+              {/* Pre-paid info box */}
+              {isPrePaid && (() => {
+                const isBkash = payment.startsWith('bkash')
+                const number  = payment === 'bkash_personal' ? BKASH_PERSONAL : payment === 'bkash_merchant' ? BKASH_MERCHANT : NAGAD_NUMBER
+                const accent  = isBkash ? '#E2136E' : '#E05C00'
+                const bg      = isBkash ? '#fff0f6'  : '#fff7f0'
+                const border  = isBkash ? '#fda4af'  : '#fdba74'
+                const numId   = `num-${payment}`
+                const steps   = isBkash
+                  ? payment === 'bkash_personal'
+                    ? ['বিকাশ অ্যাপ খুলুন → Send Money', `নম্বরে পাঠান: ${number}`, 'Transaction ID কপি করুন', 'নিচের ঘরে লিখুন']
+                    : ['বিকাশ অ্যাপ খুলুন → Make Payment', `নম্বরে পেমেন্ট করুন: ${number}`, 'Transaction ID কপি করুন', 'নিচের ঘরে লিখুন']
+                  : ['নগদ অ্যাপ খুলুন → Send Money', `নম্বরে পাঠান: ${number}`, 'Transaction ID কপি করুন', 'নিচের ঘরে লিখুন']
 
-                  <div
-                    className="flex items-center justify-between rounded-xl px-4 py-3 text-sm"
-                    style={{ background: 'white', border: '1px solid #fecdd3' }}
-                  >
+                return (
+                  <div className="rounded-2xl p-5 space-y-4" style={{ background: bg, border: `1.5px solid ${border}` }}>
+
+                    {/* Header */}
+                    <div className="flex items-center gap-2.5">
+                      {isBkash ? <BkashLogo size={26} /> : <NagadLogo size={26} />}
+                      <p className="font-bold text-sm" style={{ color: accent }}>
+                        {isBkash ? 'বিকাশে' : 'নগদে'} পেমেন্ট করার নিয়ম
+                      </p>
+                    </div>
+
+                    {/* Number box with copy */}
+                    <div
+                      className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl px-4 py-3"
+                      style={{ background: 'white', border: `1px solid ${border}` }}
+                    >
+                      <div className="min-w-0">
+                        <p className="text-xs font-semibold mb-0.5" style={{ color: accent }}>
+                          {isBkash ? (payment === 'bkash_personal' ? 'Personal Number' : 'Merchant Number') : 'Nagad Number'}
+                        </p>
+                        <p className="font-bold text-xl tracking-wider" style={{ color: accent }}>
+                          {number}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(number, numId)}
+                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0"
+                        style={{
+                          background: copied === numId ? '#d1fae5' : `${accent}15`,
+                          color:      copied === numId ? '#065f46'  : accent,
+                          border:     `1.5px solid ${copied === numId ? '#6ee7b7' : accent}`,
+                        }}
+                      >
+                        {copied === numId ? '✓ কপি হয়েছে!' : '⎘ কপি করুন'}
+                      </button>
+                    </div>
+
+                    {/* Steps */}
+                    <ol className="space-y-1.5">
+                      {steps.map((step, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-xs" style={{ color: accent }}>
+                          <span
+                            className="shrink-0 w-5 h-5 rounded-full flex items-center justify-center font-bold text-white text-xs"
+                            style={{ background: accent, marginTop: '1px' }}
+                          >
+                            {i + 1}
+                          </span>
+                          {step}
+                        </li>
+                      ))}
+                    </ol>
+
+                    {/* Transaction ID */}
                     <div>
-                      <p className="text-xs font-semibold" style={{ color: '#E2136E' }}>Account Type</p>
-                      <p className="font-bold" style={{ color: '#9d0040' }}>
-                        {payment === 'bkash_personal' ? 'Personal Account' : 'Merchant Account'}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-xs font-semibold" style={{ color: '#E2136E' }}>Number</p>
-                      <p className="font-bold text-base tracking-widest" style={{ color: '#9d0040' }}>
-                        {payment === 'bkash_personal' ? BKASH_PERSONAL : BKASH_MERCHANT}
-                      </p>
+                      <label className={lbl} style={{ color: accent }}>ট্রানজেকশন ID *</label>
+                      <input
+                        type="text"
+                        className="w-full px-4 py-3 rounded-xl bg-white text-stone-800 text-sm transition-all"
+                        style={{ border: `2px solid ${border}`, outline: 'none' }}
+                        onFocus={e => (e.currentTarget.style.borderColor = accent)}
+                        onBlur={e  => (e.currentTarget.style.borderColor = border)}
+                        placeholder="যেমন: 8HJ3K2LM9N"
+                        value={txId}
+                        onChange={e => setTxId(e.target.value)}
+                        required={isPrePaid}
+                      />
                     </div>
                   </div>
-
-                  <ol className="text-xs space-y-1 list-decimal list-inside" style={{ color: '#be185d' }}>
-                    <li>উপরের নম্বরে পেমেন্ট পাঠান (Send Money বা Payment)</li>
-                    <li>ট্রানজেকশন ID সংগ্রহ করুন</li>
-                    <li>নিচের ঘরে সেই ID লিখুন</li>
-                  </ol>
-
-                  <div>
-                    <label className={lbl} style={{ color: '#9d0040' }}>ট্রানজেকশন ID *</label>
-                    <input
-                      type="text"
-                      className="w-full px-4 py-3 rounded-xl bg-white text-stone-800 text-sm transition-all"
-                      style={{ border: '2px solid #fda4af', outline: 'none' }}
-                      onFocus={e  => (e.currentTarget.style.borderColor = '#E2136E')}
-                      onBlur={e   => (e.currentTarget.style.borderColor = '#fda4af')}
-                      placeholder="যেমন: 8HJ3K2LM9N"
-                      value={txId}
-                      onChange={e => setTxId(e.target.value)}
-                      required={isBkash}
-                    />
-                  </div>
-                </div>
-              )}
+                )
+              })()}
             </div>
 
             {/* ── Submit ── */}

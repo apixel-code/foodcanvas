@@ -182,15 +182,7 @@ body {
   animation: scrollLine 2s ease-in-out infinite;
 }
 
-/* ─── FAQ accordion ─── */
-.faq-answer {
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-.faq-answer.faq-open {
-  max-height: 200px;
-}
+/* ─── FAQ accordion (handled via inline styles in component) ─── */
 
 /* ─── Generic section badge ─── */
 .badge-green {

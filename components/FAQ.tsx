@@ -69,12 +69,19 @@ export default function FAQ() {
                     </span>
                   </button>
 
-                  <div className={`faq-answer ${isOpen ? 'faq-open' : ''}`}>
-                    <div
-                      className="px-6 pb-5 text-sm leading-relaxed"
-                      style={{ color: '#57534e', background: 'var(--color-mint)' }}
-                    >
-                      {faq.a}
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateRows: isOpen ? '1fr' : '0fr',
+                    transition: 'grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1)',
+                  }}>
+                    {/* overflow:hidden এই div-এ থাকবে — padding নেই */}
+                    <div style={{ overflow: 'hidden' }}>
+                      <div
+                        className="px-6 pb-5 text-sm leading-relaxed"
+                        style={{ color: '#57534e', background: 'var(--color-mint)' }}
+                      >
+                        {faq.a}
+                      </div>
                     </div>
                   </div>
                 </div>
