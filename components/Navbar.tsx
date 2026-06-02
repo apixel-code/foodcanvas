@@ -38,6 +38,7 @@ export default function Navbar() {
             alt="Food Canvas Logo"
             width={52}
             height={52}
+            priority
             className="transition-transform group-hover:scale-110 drop-shadow-md"
           />
           <div>
