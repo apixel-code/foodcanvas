@@ -40,6 +40,8 @@
 html, body { overflow-x: hidden; max-width: 100%; }
 html { scroll-behavior: smooth; }
 
+h1, h2 { font-family: var(--font-hind), sans-serif; }
+
 body {
   background-color: var(--color-cream);
   color: #1c1917;

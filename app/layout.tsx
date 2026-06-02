@@ -1,12 +1,19 @@
 import type { Metadata } from 'next'
-import { Noto_Sans_Bengali } from 'next/font/google'
+import { Noto_Sans_Bengali, Hind_Siliguri } from 'next/font/google'
 import './globals.css'
 import FloatingButtons from '@/components/FloatingButtons'
 
-const hind = Noto_Sans_Bengali({
+const noto = Noto_Sans_Bengali({
   subsets: ['bengali', 'latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-bangla',
+  display: 'swap',
+})
+
+const hind = Hind_Siliguri({
+  subsets: ['bengali', 'latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-hind',
   display: 'swap',
 })
 
@@ -25,7 +32,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="bn" className={hind.variable}>
+    <html lang="bn" className={`${noto.variable} ${hind.variable}`}>
       <body className="min-h-full antialiased" style={{ fontFamily: 'var(--font-bangla)' }}>
         {children}
         <FloatingButtons />
