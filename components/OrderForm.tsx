@@ -211,6 +211,9 @@ export default function OrderForm() {
       if (res.ok) {
         setTrackingCode(data.tracking_code || '')
         setSuccess(true)
+        setTimeout(() => {
+          document.getElementById('order')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }, 50)
         setName(''); setPhone(''); setAddress(''); setDistrict('')
         setTxId(''); setNote(''); setQty(1); setSelectedId('5kg'); setPayment('cod'); setThana('')
       } else {
