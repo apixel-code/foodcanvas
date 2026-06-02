@@ -45,10 +45,10 @@ export async function POST(req: NextRequest) {
     )
   }
 
-  const isBkash = body.payment === 'bkash_personal' || body.payment === 'bkash_merchant'
-  if (isBkash && !body.transactionId) {
+  const isPrePaid = body.payment === 'bkash_personal' || body.payment === 'bkash_merchant' || body.payment === 'nagad'
+  if (isPrePaid && !body.transactionId) {
     return NextResponse.json(
-      { error: 'বিকাশ পেমেন্টের জন্য ট্রানজেকশন ID দিন' },
+      { error: 'পেমেন্টের ট্রানজেকশন ID দিন' },
       { status: 400 },
     )
   }
@@ -58,8 +58,8 @@ export async function POST(req: NextRequest) {
   const deliveryTotal = kg * DELIVERY_PER_KG
   const grandTotal    = productTotal + deliveryTotal
 
-  // COD = 0 for bKash (customer already paid merchant); full amount for cash-on-delivery
-  const cod_amount = isBkash ? 0 : grandTotal
+  // Pre-paid (bKash/Nagad) → cod_amount = 0; Cash on Delivery → full amount
+  const cod_amount = isPrePaid ? 0 : grandTotal
 
   // Unique invoice number per order (timestamp + last 4 digits of phone)
   const invoice = `FC-${Date.now()}-${phone.slice(-4)}`

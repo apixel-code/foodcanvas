@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
   let tracking: { delivery_status: string } | null = null
   try {
     const sfRes = await fetch(
-      `https://portal.steadfast.com.bd/api/v1/status_by_trackingcode/${encodeURIComponent(order.trackingCode)}`,
+      `https://portal.packzy.com/api/v1/status_by_trackingcode/${encodeURIComponent(order.trackingCode)}`,
       {
         headers: {
           'Api-Key':    process.env.STEADFAST_API_KEY!,

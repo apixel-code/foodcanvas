@@ -37,7 +37,7 @@ export default function Home() {
             offers: {
               '@type': 'Offer',
               priceCurrency: 'BDT',
-              price: '140',
+              price: '99',
               availability: 'https://schema.org/InStock',
             },
           }),
