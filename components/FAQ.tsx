@@ -48,7 +48,7 @@ export default function FAQ() {
                   }}
                 >
                   <button
-                    className="w-full flex items-center justify-between px-6 py-5 text-left transition-colors"
+                    className="w-full flex items-center justify-between px-6 py-5 text-left transition-colors cursor-pointer"
                     onClick={() => setOpen(isOpen ? null : i)}
                   >
                     <span

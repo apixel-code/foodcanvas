@@ -260,7 +260,7 @@ export default function OrderForm() {
 
             <button
               onClick={() => { setSuccess(false); setTrackingCode('') }}
-              className="text-xs underline text-green-700"
+              className="text-xs underline text-green-700 cursor-pointer"
             >
               আরেকটি অর্ডার করুন
             </button>
@@ -331,7 +331,7 @@ export default function OrderForm() {
                           type="button"
                           onClick={() => isSelected && setQty(q => Math.max(1, q - 1))}
                           disabled={!isSelected || qty <= 1}
-                          className="w-9 h-9 flex items-center justify-center text-base font-bold transition-colors disabled:opacity-30"
+                          className="w-9 h-9 flex items-center justify-center text-base font-bold transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                           style={{ color: isSelected ? 'var(--color-primary)' : '#9ca3af' }}
                         >
                           −
@@ -349,7 +349,7 @@ export default function OrderForm() {
                           type="button"
                           onClick={() => isSelected && setQty(q => q + 1)}
                           disabled={!isSelected}
-                          className="w-9 h-9 flex items-center justify-center text-base font-bold transition-colors disabled:opacity-30"
+                          className="w-9 h-9 flex items-center justify-center text-base font-bold transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                           style={{ color: isSelected ? 'var(--color-primary)' : '#9ca3af' }}
                         >
                           +
@@ -548,7 +548,7 @@ export default function OrderForm() {
                       <button
                         type="button"
                         onClick={() => handleCopy(number, numId)}
-                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0"
+                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer"
                         style={{
                           background: copied === numId ? '#d1fae5' : `${accent}15`,
                           color:      copied === numId ? '#065f46'  : accent,
@@ -599,7 +599,7 @@ export default function OrderForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full font-bold py-4 rounded-2xl text-base text-white transition-all disabled:opacity-60"
+                className="w-full font-bold py-4 rounded-2xl text-base text-white transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 style={{
                   background: loading ? '#9ca3af' : 'linear-gradient(135deg, #e8721e, #c9570e)',
                   boxShadow: loading ? 'none' : '0 8px 28px rgba(232,114,30,0.4)',

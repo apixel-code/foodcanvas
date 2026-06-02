@@ -103,7 +103,7 @@ function ProductCard({ p }: { p: (typeof products)[0] }) {
               <button
                 key={i}
                 onClick={() => setImgIdx(i)}
-                className="rounded-full transition-all duration-300"
+                className="rounded-full transition-all duration-300 cursor-pointer"
                 style={{
                   width: i === imgIdx ? 20 : 7,
                   height: 7,

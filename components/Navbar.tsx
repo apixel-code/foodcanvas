@@ -79,7 +79,7 @@ export default function Navbar() {
 
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden p-2 text-white text-2xl"
+          className="md:hidden p-2 text-white text-2xl cursor-pointer"
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="মেনু"
         >

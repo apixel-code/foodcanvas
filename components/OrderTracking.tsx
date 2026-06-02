@@ -376,7 +376,7 @@ export default function OrderTracking() {
           <button
             type="submit"
             disabled={loading || !phone}
-            className="shrink-0 px-6 py-3.5 rounded-xl text-sm font-bold text-white transition-all disabled:opacity-50"
+            className="shrink-0 px-6 py-3.5 rounded-xl text-sm font-bold text-white transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
               background: loading
                 ? '#9ca3af'
@@ -461,7 +461,7 @@ export default function OrderTracking() {
               <button
                 type="button"
                 onClick={() => handleTrack({ preventDefault: () => {} } as React.FormEvent)}
-                className="text-xs underline underline-offset-2"
+                className="text-xs underline underline-offset-2 cursor-pointer"
                 style={{ color: 'var(--color-text-muted)' }}
               >
                 🔄 স্ট্যাটাস রিফ্রেশ করুন

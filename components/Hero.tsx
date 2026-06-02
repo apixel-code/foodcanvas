@@ -160,7 +160,7 @@ export default function Hero() {
           <button
             key={i}
             onClick={() => setCurrent(i)}
-            className="rounded-full transition-all duration-500 block"
+            className="rounded-full transition-all duration-500 block cursor-pointer"
             style={{
               width: 5,
               height: i === current ? 28 : 5,
