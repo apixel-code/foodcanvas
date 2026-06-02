@@ -155,7 +155,7 @@ export default function Hero() {
       </div>
 
       {/* ── Dot indicators (right side) ── */}
-      <div className="absolute right-5 top-1/2 -translate-y-1/2 z-20 flex flex-col gap-2.5">
+      <div className="absolute right-5 top-1/2 -translate-y-1/2 z-20 hidden sm:flex flex-col gap-2.5">
         {bgImages.map((_, i) => (
           <button
             key={i}

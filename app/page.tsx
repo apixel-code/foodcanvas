@@ -12,7 +12,7 @@ import Footer from '@/components/Footer'
 
 export default function Home() {
   return (
-    <main style={{ background: 'var(--color-cream)' }}>
+    <main style={{ background: 'var(--color-cream)', overflowX: 'hidden', width: '100%' }}>
       <Navbar />
       <Hero />
       <WhyUs />
