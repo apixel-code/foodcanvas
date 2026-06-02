@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 
 const links = [
   { label: 'হোম', href: '#' },
@@ -31,8 +32,14 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
 
         {/* Logo */}
-        <a href="#" className="flex items-center gap-3 group">
-          <span className="text-3xl transition-transform group-hover:scale-110">🥭</span>
+        <a href="#" className="flex items-center gap-2 group">
+          <Image
+            src="/images/logo.png"
+            alt="Food Canvas Logo"
+            width={52}
+            height={52}
+            className="transition-transform group-hover:scale-110 drop-shadow-md"
+          />
           <div>
             <p className="font-bold text-lg leading-tight text-white tracking-tight">
               Food Canvas

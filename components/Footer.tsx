@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function Footer() {
   const navLinks = [
     { label: 'হোম', href: '#' },
@@ -22,7 +24,13 @@ export default function Footer() {
           {/* Brand column */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <span className="text-3xl">🥭</span>
+              <Image
+                src="/images/logo.png"
+                alt="Food Canvas Logo"
+                width={56}
+                height={56}
+                className="drop-shadow-md"
+              />
               <div>
                 <p className="text-white font-bold text-xl leading-tight">
                   Food Canvas
