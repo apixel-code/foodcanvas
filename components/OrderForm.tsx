@@ -272,7 +272,7 @@ export default function OrderForm() {
 
             {/* ── ১. পণ্য নির্বাচন ── */}
             <div
-              className="rounded-t-3xl p-6 md:p-8"
+              className="rounded-t-3xl p-4 md:p-8"
               style={{ background: 'white', borderBottom: '1px solid #f0f0f0' }}
             >
               <h3 className="font-bold text-base mb-5" style={{ color: 'var(--color-primary)' }}>
@@ -285,7 +285,7 @@ export default function OrderForm() {
                   return (
                     <label
                       key={p.id}
-                      className="flex items-center gap-4 px-4 py-4 cursor-pointer transition-colors"
+                      className="flex items-center gap-2 sm:gap-4 px-3 sm:px-4 py-3 sm:py-4 cursor-pointer transition-colors"
                       style={{
                         background: isSelected ? '#f0fdf4' : 'white',
                       }}
@@ -310,13 +310,13 @@ export default function OrderForm() {
                       />
 
                       {/* Image */}
-                      <div className="shrink-0 w-14 h-14 rounded-xl overflow-hidden bg-stone-100 relative">
-                        <Image src={p.img} alt={p.name} fill className="object-cover" sizes="56px" />
+                      <div className="shrink-0 w-10 h-10 sm:w-14 sm:h-14 rounded-xl overflow-hidden bg-stone-100 relative">
+                        <Image src={p.img} alt={p.name} fill className="object-cover" sizes="(max-width: 640px) 40px, 56px" />
                       </div>
 
                       {/* Name */}
                       <span
-                        className="flex-1 text-sm font-medium"
+                        className="flex-1 min-w-0 line-clamp-2 text-xs sm:text-sm font-medium"
                         style={{ color: isSelected ? 'var(--color-primary)' : '#374151' }}
                       >
                         {p.name}
@@ -331,13 +331,13 @@ export default function OrderForm() {
                           type="button"
                           onClick={() => isSelected && setQty(q => Math.max(1, q - 1))}
                           disabled={!isSelected || qty <= 1}
-                          className="w-9 h-9 flex items-center justify-center text-base font-bold transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                          className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-sm sm:text-base font-bold transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                           style={{ color: isSelected ? 'var(--color-primary)' : '#9ca3af' }}
                         >
                           −
                         </button>
                         <span
-                          className="w-10 text-center text-sm font-bold border-x"
+                          className="w-7 sm:w-10 text-center text-xs sm:text-sm font-bold border-x"
                           style={{
                             borderColor: isSelected ? 'var(--color-primary)' : '#e5e7eb',
                             color: '#1c1917',
@@ -349,16 +349,16 @@ export default function OrderForm() {
                           type="button"
                           onClick={() => isSelected && setQty(q => q + 1)}
                           disabled={!isSelected}
-                          className="w-9 h-9 flex items-center justify-center text-base font-bold transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
+                          className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-sm sm:text-base font-bold transition-colors cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed"
                           style={{ color: isSelected ? 'var(--color-primary)' : '#9ca3af' }}
                         >
                           +
                         </button>
                       </div>
 
-                      {/* Price */}
+                      {/* Price — hidden on mobile (visible in summary below) */}
                       <span
-                        className="shrink-0 w-20 text-right font-bold text-sm"
+                        className="hidden sm:inline shrink-0 text-right font-bold text-sm"
                         style={{ color: isSelected ? '#dc2626' : '#6b7280' }}
                       >
                         {(p.price * (isSelected ? qty : 1)).toLocaleString('bn-BD')}৳
@@ -371,11 +371,11 @@ export default function OrderForm() {
 
             {/* ── ২. বিলিং + সারসংক্ষেপ ── */}
             <div
-              className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 p-6 md:p-8"
+              className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-6 p-4 md:p-8"
               style={{ background: 'white', borderTop: '1px solid #f0f0f0' }}
             >
               {/* বিলিং তথ্য */}
-              <div className="space-y-4 pb-6 md:pb-0 border-b md:border-b-0 md:border-r border-stone-100 md:pr-6">
+              <div className="space-y-4 pb-4 md:pb-0 border-b md:border-b-0 md:border-r border-stone-100 md:pr-6">
                 <h3 className="font-bold text-base" style={{ color: 'var(--color-primary)' }}>
                   বিলিং তথ্য
                 </h3>
@@ -422,7 +422,7 @@ export default function OrderForm() {
               </div>
 
               {/* অর্ডার সারসংক্ষেপ */}
-              <div className="pt-6 md:pt-0 md:pl-6 space-y-5 flex flex-col">
+              <div className="pt-4 md:pt-0 md:pl-6 space-y-5 flex flex-col">
                 <h3 className="font-bold text-base" style={{ color: 'var(--color-primary)' }}>
                   আপনার পণ্য
                 </h3>
@@ -467,7 +467,7 @@ export default function OrderForm() {
             </div>
 
             {/* ── ৩. পেমেন্ট পদ্ধতি ── */}
-            <div className="p-6 md:p-8 space-y-5" style={{ background: 'white', borderTop: '1px solid #f0f0f0' }}>
+            <div className="p-4 md:p-8 space-y-5" style={{ background: 'white', borderTop: '1px solid #f0f0f0' }}>
               <h3 className="font-bold text-base" style={{ color: 'var(--color-primary)' }}>
                 পেমেন্ট পদ্ধতি
               </h3>
@@ -595,7 +595,7 @@ export default function OrderForm() {
             </div>
 
             {/* ── Submit ── */}
-            <div className="rounded-b-3xl p-6 md:p-8 pt-0" style={{ background: 'white' }}>
+            <div className="rounded-b-3xl p-4 md:p-8 pt-0" style={{ background: 'white' }}>
               <button
                 type="submit"
                 disabled={loading}
