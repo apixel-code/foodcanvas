@@ -27,6 +27,20 @@ export const metadata: Metadata = {
     description: 'Food Canvas — তাজা, মিষ্টি, কেমিক্যাল মুক্ত হিমসাগর আম। এখনই অর্ডার করুন।',
     type: 'website',
     locale: 'bn_BD',
+    images: [
+      {
+        url: '/images/For_OpenGraph.png',
+        width: 2940,
+        height: 1602,
+        alt: 'Food Canvas — রাজশাহীর সেরা হিমসাগর আম',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Food Canvas — রাজশাহী থেকে সরাসরি',
+    description: 'Food Canvas — তাজা, মিষ্টি, কেমিক্যাল মুক্ত হিমসাগর আম। এখনই অর্ডার করুন।',
+    images: ['/images/For_OpenGraph.png'],
   },
 }
 
