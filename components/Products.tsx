@@ -1,16 +1,12 @@
 'use client'
 import Image from 'next/image'
-import { useState } from 'react'
 import { useInView } from '@/hooks/useInView'
 
 const products = [
   {
     id: 1,
     name: '১ কেজি প্যাকেজ',
-    images: [
-      'https://images.unsplash.com/photo-1688492596644-b0e68aa86477?w=800&h=600&fit=crop&q=85&auto=format',
-      'https://images.unsplash.com/photo-1685478676925-05548b7bc317?w=800&h=600&fit=crop&q=85&auto=format',
-    ],
+    image: '/images/product_img_01.jpeg',
     badge: 'ট্রায়াল প্যাক',
     badgeStyle: { background: 'var(--color-primary-pale)', color: 'var(--color-primary)' },
     weight: '১ কেজি',
@@ -24,10 +20,7 @@ const products = [
   {
     id: 2,
     name: '৫ কেজি প্যাকেজ',
-    images: [
-      'https://images.unsplash.com/photo-1630552358140-c50ab1c5f8be?w=800&h=600&fit=crop&q=85&auto=format',
-      'https://images.unsplash.com/photo-1672709904166-c551e5051eb2?w=800&h=600&fit=crop&q=85&auto=format',
-    ],
+    image: '/images/product_img-02.jpeg',
     badge: '⭐ সবচেয়ে জনপ্রিয়',
     badgeStyle: { background: '#e8721e', color: '#fff' },
     weight: '৫ কেজি',
@@ -41,10 +34,7 @@ const products = [
   {
     id: 3,
     name: '১০ কেজি প্যাকেজ',
-    images: [
-      'https://images.unsplash.com/photo-1680008702821-e1b598db30f3?w=800&h=600&fit=crop&q=85&auto=format',
-      'https://images.unsplash.com/photo-1685478677352-43868751fb8e?w=800&h=600&fit=crop&q=85&auto=format',
-    ],
+    image: '/images/product_img_03.png',
     badge: '💎 বেস্ট ভ্যালু',
     badgeStyle: { background: 'var(--color-primary)', color: '#fff' },
     weight: '১০ কেজি',
@@ -58,8 +48,6 @@ const products = [
 ]
 
 function ProductCard({ p }: { p: (typeof products)[0] }) {
-  const [imgIdx, setImgIdx] = useState(0)
-
   return (
     <div
       className="product-card-hover rounded-3xl overflow-hidden bg-white flex flex-col"
@@ -83,10 +71,10 @@ function ProductCard({ p }: { p: (typeof products)[0] }) {
       {/* Image */}
       <div className="relative h-56 overflow-hidden bg-stone-100">
         <Image
-          src={p.images[imgIdx]}
+          src={p.image}
           alt={`Food Canvas হিমসাগর আম ${p.name}`}
           fill
-          className="object-cover transition-all duration-500"
+          className="object-cover"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
         {/* Badge */}
@@ -96,24 +84,6 @@ function ProductCard({ p }: { p: (typeof products)[0] }) {
         >
           {p.badge}
         </span>
-        {/* Thumbnail strip */}
-        {p.images.length > 1 && (
-          <div className="absolute bottom-0 left-0 right-0 flex gap-1.5 px-3 py-2" style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.5))' }}>
-            {p.images.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setImgIdx(i)}
-                className="rounded-full transition-all duration-300 cursor-pointer"
-                style={{
-                  width: i === imgIdx ? 20 : 7,
-                  height: 7,
-                  background: i === imgIdx ? '#fbbf24' : 'rgba(255,255,255,0.5)',
-                }}
-                aria-label={`ছবি ${i + 1}`}
-              />
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Content */}
